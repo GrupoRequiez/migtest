@@ -12,12 +12,12 @@ class AccountInvoiceReport(models.Model):
         string='Brand',
     )
 
-    def _from(self):
-        from_str = super(AccountInvoiceReport, self)._from()
-        from_str += """
-        LEFT JOIN product_brand pb ON pb.id = template.product_brand_id
-        """
-        return from_str
+    # def _from(self):
+    #     from_str = super(AccountInvoiceReport, self)._from()
+    #     from_str += """
+    #     LEFT JOIN product_brand pb ON pb.id = template.product_brand_id
+    #     """
+    #     return from_str
 
     @api.model
     def _group_by(self):
