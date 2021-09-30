@@ -15,7 +15,7 @@ class AccountInvoiceReport(models.Model):
     def _select(self):
         select_str = super()._select()
         select_str += """
-            , template.product_brand_id as product_brand_id
+            , template.product_brand_id as brand_id
             """
         return select_str
 
