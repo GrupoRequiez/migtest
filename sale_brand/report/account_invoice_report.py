@@ -41,16 +41,14 @@ class AccountInvoiceReport(models.Model):
         """
         return from_str
 
-    @api.model
-    def _group_by(self):
-        group_by_str = super(AccountInvoiceReport, self)._group_by()
-        group_by_str += """
-        , template.product_brand_id
+    def _select(self):
+        select_str = super(AccountInvoiceReport, self)._select()
+        select_str += """
+        , template.product_brand_id as product_brand_id
         """
         # , pb.name
-        return group_by_str
+        return select_str
 
-    @api.model
     def _sub_select(self):
         sub_select_str = super(AccountInvoiceReport, self)._sub_select()
         sub_select_str += """
@@ -59,11 +57,10 @@ class AccountInvoiceReport(models.Model):
         # , pb.name
         return sub_select_str
 
-    @api.model
-    def _select(self):
-        select_str = super(AccountInvoiceReport, self)._select()
-        select_str += """
-        , template.product_brand_id as product_brand_id
+    def _group_by(self):
+        group_by_str = super(AccountInvoiceReport, self)._group_by()
+        group_by_str += """
+        , template.product_brand_id
         """
         # , pb.name
-        return select_str
+        return group_by_str
