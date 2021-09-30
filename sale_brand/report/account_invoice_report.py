@@ -44,23 +44,23 @@ class AccountInvoiceReport(models.Model):
     @api.model
     def _group_by(self):
         group_by_str = super(AccountInvoiceReport, self)._group_by()
-        group_by_str += """
-        , pb.name as brand
+        group_by_str += """,
+        pb.name as brand
         """
         return group_by_str
 
     @api.model
     def _sub_select(self):
         sub_select_str = super(AccountInvoiceReport, self)._sub_select()
-        sub_select_str += """
-        , pb.name as brand
+        sub_select_str += """,
+        pb.name
         """
         return sub_select_str
 
     @api.model
     def _select(self):
         select_str = super(AccountInvoiceReport, self)._select()
-        select_str += """
-        , pb.name  as brand
+        select_str += """,
+        pb.name
         """
         return select_str
