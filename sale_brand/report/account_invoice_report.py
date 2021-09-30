@@ -26,8 +26,13 @@ _logger = logging.getLogger(__name__)
 
 
 class AccountInvoiceReport(models.Model):
-    _name = "account.invoice.report"
+    # _name = "account.invoice.report"
     _inherit = 'account.invoice.report'
+
+    product_brand_id = fields.Many2one(
+        comodel_name='product.brand',
+        string='Brand',
+    )
 
     def _from(self):
         from_str = super(AccountInvoiceReport, self)._from()
@@ -40,7 +45,7 @@ class AccountInvoiceReport(models.Model):
     def _group_by(self):
         group_by_str = super(AccountInvoiceReport, self)._group_by()
         group_by_str += """
-        , pb.name
+        , pb.name as brand
         """
         return group_by_str
 
@@ -56,6 +61,6 @@ class AccountInvoiceReport(models.Model):
     def _select(self):
         select_str = super(AccountInvoiceReport, self)._select()
         select_str += """
-        , pb.name
+        , pb.name  as brand
         """
         return select_str
