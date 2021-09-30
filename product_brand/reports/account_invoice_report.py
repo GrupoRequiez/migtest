@@ -1,7 +1,7 @@
 # Copyright 2018 Tecnativa - David Vidal
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html)
 
-from odoo import fields, models
+from odoo import fields, models, api
 
 
 class AccountInvoiceReport(models.Model):
@@ -42,6 +42,7 @@ class AccountInvoiceReport(models.Model):
         , pb.name
         """
         return select_str
+
     # def _select(self):
     #     select_str = super()._select()
     #     select_str += """
