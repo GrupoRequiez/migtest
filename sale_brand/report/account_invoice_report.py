@@ -34,25 +34,25 @@ class AccountInvoiceReport(models.Model):
         string='Brand',
     )
 
-    def _from(self):
-        from_str = super(AccountInvoiceReport, self)._from()
-        from_str += """
-        LEFT JOIN product_brand pb ON pb.id = template.product_brand_id
-        """
-        return from_str
+    # def _from(self):
+    #     from_str = super(AccountInvoiceReport, self)._from()
+    #     from_str += """
+    #     LEFT JOIN product_brand pb ON pb.id = template.product_brand_id
+    #     """
+    #     return from_str
 
     def _select(self):
         select_str = super(AccountInvoiceReport, self)._select()
         select_str += """
-        , template.product_brand_id as product_brand_id
+        , pb.name as brand
         """
-        # , pb.name
+        # ,
         return select_str
 
     def _sub_select(self):
         sub_select_str = super(AccountInvoiceReport, self)._sub_select()
         sub_select_str += """
-        , template.product_brand_id
+        , pb.name
         """
         # , pb.name
         return sub_select_str
@@ -60,7 +60,7 @@ class AccountInvoiceReport(models.Model):
     def _group_by(self):
         group_by_str = super(AccountInvoiceReport, self)._group_by()
         group_by_str += """
-        , template.product_brand_id
+        , pb.name
         """
         # , pb.name
         return group_by_str
