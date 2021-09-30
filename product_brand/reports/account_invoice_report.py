@@ -19,23 +19,16 @@ class AccountInvoiceReport(models.Model):
             """
         return select_str
 
-    def _from(self):
-        from_str = super(AccountInvoiceReport, self)._from()
-        from_str += """
-        LEFT JOIN product_brand pb ON pb.id = template.product_brand_id
-        """
-        return from_str
-
     def _sub_select(self):
         select_str = super()._sub_select()
         select_str += """
-            , pb.name
+            , template.product_brand_id.name
             """
         return select_str
 
     def _group_by(self):
         group_by_str = super()._group_by()
         group_by_str += """
-            , pb.name
+            , template.product_brand_id.name
             """
         return group_by_str
