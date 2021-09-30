@@ -45,7 +45,7 @@ class AccountInvoiceReport(models.Model):
     def _group_by(self):
         group_by_str = super(AccountInvoiceReport, self)._group_by()
         group_by_str += """
-        , pb.name as brand
+        , pb.name
         """
         return group_by_str
 
