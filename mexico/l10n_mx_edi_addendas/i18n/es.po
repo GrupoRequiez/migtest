@@ -1,0 +1,1639 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_mx_edi_addendas
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-07-23 22:10+0000\n"
+"PO-Revision-Date: 2020-07-23 22:10+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_airbus_description
+msgid ""
+"\n"
+"            It is a text that briefly describes the invoice. Being a field\n"
+"            short, the provider should make sure to clearly indicate the\n"
+"            concept."
+msgstr "\n"
+"            Es un texto que describe brevemente la factura. Al ser un campo\n"
+"            corto, el proveedor debe asegurarse de indicar claramente el \n"
+"            concepto."
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.fresko
+msgid "0.00"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.fresko
+msgid "0.000"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.fresko
+msgid "00000"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.fresko
+msgid "0000000000000"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.envases
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.zfmexico
+msgid "1.0"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_nissan_view
+msgid "<b><i>Carrier name</i></b> (<b><i>conducto</i></b>): Delivery way."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_nissan_view
+msgid ""
+"<b><i>Reference/Description</i></b> (<b><i>noPedCli</i></b>): Customer order"
+" reference."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_nissan_view
+msgid ""
+"<b><i>Salesperson</i></b> (<b><i>referencia</i></b>): Salesperson name."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_nissan_view
+msgid "<b><i>Weight</i></b> (<b><i>kilos/libras</i></b>): weight in kg."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_ford_view
+msgid "<b>ASN:</b>"
+msgstr "<b>ASN:</b>"
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_airbus_view
+msgid "<b>Attached File (xls, xlsx, pdf, jpg):</b>"
+msgstr "<b>Archivo adjunto (xls, xlsx, pdf, jpg):</b>"
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_nestle_view
+msgid "<b>Bill To:</b>"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_airbus_view
+msgid "<b>Concept:</b>"
+msgstr "<b>Concepto:</b>"
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_airbus_view
+msgid "<b>Custom:</b>"
+msgstr "<b>Pedimento:</b>"
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_airbus_view
+msgid "<b>Delivery Number:</b>"
+msgstr "<b>Numero de entrega:</b>"
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_airbus_view
+msgid "<b>Description:</b>"
+msgstr "<b>Descripción:</b>"
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_ford_view
+msgid "<b>GSDB:</b>"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_edumex_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_envases_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_nestle_view
+msgid "<b>Incoming Code:</b>"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_nestle_view
+msgid "<b>Invoice Number:</b>"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_airbus_view
+msgid "<b>Lines:</b>"
+msgstr "<b>Lineas:</b>"
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_ford_view
+msgid ""
+"<b>Non-Productive Material, Spare parts warehouse and Services:</b> The ASN "
+"is considered to be the number that the Suppliers show in the XML as folio, "
+"and later when the receipt of material/service is registered is shown on the"
+" epayables page in the 'doc number' column."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_aam_view
+msgid "<b>Operational Organization:</b>"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_pepsico_view
+msgid "<b>Payment Request:</b>"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_aam_view
+msgid "<b>Product SAP Information:</b>"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_ford_view
+msgid ""
+"<b>Productive Material:</b> ASN is the number (folio and/or remission and/or"
+" shipper and/or packing slip) used by the Supplier to carry out the delivery"
+" of production materials in the Plants, and later when the receipt of "
+"material is registered in the warehouse of Ford is shown on the epayables "
+"page in the 'doc number' column."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_aam_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_airbus_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_envases_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_femsa_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_nestle_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_pepsico_view
+msgid "<b>Purchase Order:</b>"
+msgstr "<b>Orden de Compra:</b>"
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_airbus_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_femsa_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_pepsico_view
+msgid "<b>Reception Number:</b>"
+msgstr "<b>Numero de recepción:</b>"
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_femsa_view
+msgid "<b>Remission Number:</b>"
+msgstr "<b>Número de Remisión :</b>"
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_aam_view
+msgid "<b>Requisitor:</b>"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_nestle_view
+msgid "<b>SAP Code:</b>"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_nestle_view
+msgid "<b>Ship To:</b>"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_airbus_view
+msgid "<b>Type Operation:</b>"
+msgstr "<b>Tipo de Operación:</b>"
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_airbus_view
+msgid ""
+"<i>Material:</i> Airbus material number, when it is material or consumables "
+"(optional)."
+msgstr ""
+"<i>Material:</i> Número de material de Airbus, cuando es material o consumibles "
+"(opcional)."
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_airbus_view
+msgid "<i>Sap Sequence:</i> Position of the item in the purchase order."
+msgstr "<i>Sap Secuencia:</i> Posición de la partida en la orden de compra."
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_airbus_view
+msgid "<i>UoM:</i> Airbus Helicopters unit of measure."
+msgstr "<i>UoM:</i> Unidad de medida Airbus Helicopters."
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.res_config_settings_view_form
+msgid "<span class=\"o_form_label\">Addendas</span>"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.sidel
+msgid "<text>SIDEL DE MEXICO SA DE CV</text>"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_aam_operational_organization
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_aam_view
+msgid ""
+"A division code internally used by AAM. This code is provided to the seller "
+"when the order is made."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields.selection,name:l10n_mx_edi_addendas.selection__res_config_settings__l10n_mx_addenda__aam
+msgid "AAM"
+msgstr "AAM"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields.selection,name:l10n_mx_edi_addendas.selection__res_config_settings__l10n_mx_addenda__ahmsa
+msgid "AHMSA"
+msgstr "AHMSA"
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.fresko
+msgid "AJ"
+msgstr "AJ"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_ford_asn
+msgid "ASN"
+msgstr "ASN"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_ford_asn
+msgid ""
+"ASN - Advanced Shipping Notice (numeric characters, no maximum limit of appearances).\n"
+"ASNs must be added separated by commas (,) e.g. 1,2,3,4. If no value is set, the invoice folio will be taken."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_ahmsa_account_number
+msgid "Account Number"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_ahmsa_account_number
+msgid ""
+"Account to pay. Is required to invoice without order and with class 'KT'"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.res_config_settings_view_form
+msgid "Addenda"
+msgstr "Adenda"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.act_window,name:l10n_mx_edi_addendas.action_addenda_aam
+#: model:ir.model,name:l10n_mx_edi_addendas.wizard_aam
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.invoice_aam_field
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.invoice_addenda_aam
+msgid "Addenda AAM"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model,name:l10n_mx_edi_addendas.wizard_ahmsa
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.invoice_ahmsa_field
+msgid "Addenda AHMSA"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.act_window,name:l10n_mx_edi_addendas.action_addenda_ahmsa
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.invoice_addenda_ahmsa
+msgid "Addenda Ahmsa"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.act_window,name:l10n_mx_edi_addendas.action_addenda_airbus
+#: model:ir.model,name:l10n_mx_edi_addendas.wizard_airbus
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.invoice_airbus_field
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.invoice_addenda_airbus
+msgid "Addenda Airbus"
+msgstr "Adenda Airbus"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.act_window,name:l10n_mx_edi_addendas.action_addenda_bosh
+#: model:ir.model,name:l10n_mx_edi_addendas.wizard_bosh
+msgid "Addenda Bosh"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.act_window,name:l10n_mx_edi_addendas.action_addenda_chrysler
+msgid "Addenda Chrysler"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.act_window,name:l10n_mx_edi_addendas.action_addenda_edumex
+#: model:ir.model,name:l10n_mx_edi_addendas.wizard_edumex
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.invoice_edumex_field
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.invoice_addenda_edumex
+msgid "Addenda Edumex"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.act_window,name:l10n_mx_edi_addendas.action_addenda_envases
+#: model:ir.model,name:l10n_mx_edi_addendas.wizard_envases
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.invoice_envases_field
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.invoice_addenda_envases
+msgid "Addenda Envases"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.act_window,name:l10n_mx_edi_addendas.action_addenda_faurecia
+#: model:ir.model,name:l10n_mx_edi_addendas.wizard_faurecia
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.invoice_faurecia_field
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.invoice_addenda_faurecia
+msgid "Addenda Faurecia"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.act_window,name:l10n_mx_edi_addendas.action_addenda_femsa
+#: model:ir.model,name:l10n_mx_edi_addendas.wizard_femsa
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.invoice_femsa_field
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.invoice_addenda_femsa
+msgid "Addenda Femsa"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.act_window,name:l10n_mx_edi_addendas.action_addenda_ford
+#: model:ir.model,name:l10n_mx_edi_addendas.wizard_ford
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.invoice_ford_field
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.invoice_addenda_ford
+msgid "Addenda Ford"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.act_window,name:l10n_mx_edi_addendas.action_addenda_fresko
+#: model:ir.model,name:l10n_mx_edi_addendas.wizard_fresko
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.invoice_fresko_field
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.invoice_addenda_fresko
+msgid "Addenda Fresko"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.act_window,name:l10n_mx_edi_addendas.action_addenda_nestle
+#: model:ir.model,name:l10n_mx_edi_addendas.wizard_nestle
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.invoice_nestle_field
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.invoice_addenda_nestle
+msgid "Addenda Nestle"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.act_window,name:l10n_mx_edi_addendas.action_addenda_pepsico
+#: model:ir.model,name:l10n_mx_edi_addendas.wizard_pepsico
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.invoice_pepsico_field
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.invoice_addenda_pepsico
+msgid "Addenda PepsiCo"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.act_window,name:l10n_mx_edi_addendas.action_addenda_porcelanite
+msgid "Addenda Porcelanite"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.invoice_bosh_field
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.invoice_addenda_bosh
+msgid "Addenda bosh"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model,name:l10n_mx_edi_addendas.wizard_chrysler
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.invoice_chrysler_field
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.invoice_addenda_chrysler
+msgid "Addenda chrysler"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.act_window,name:l10n_mx_edi_addendas.action_addenda_nissan
+#: model:ir.model,name:l10n_mx_edi_addendas.wizard_nissan
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.invoice_nissan_field
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.invoice_addenda_nissan
+msgid "Addenda nissan"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model,name:l10n_mx_edi_addendas.wizard_porcelanite
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.invoice_porcelanite_field
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.invoice_addenda_porcelanite
+msgid "Addenda porcelanite"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.res_config_settings_view_form
+msgid "Addendas."
+msgstr "Adendas."
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_fresko_reception
+msgid "Additional Reference Code"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_fresko_reception_folio
+msgid "Additional Reference Number"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_fresko_reception_folio
+msgid "Additional reference number"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields.selection,name:l10n_mx_edi_addendas.selection__res_config_settings__l10n_mx_addenda__agnico
+msgid "Agnico"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields.selection,name:l10n_mx_edi_addendas.selection__res_config_settings__l10n_mx_addenda__airbus
+msgid "Airbus"
+msgstr "Airbus"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.invoice_line_sap_uom
+msgid ""
+"Airbus Helicopters unit of measure. This value has to be set on each invoice"
+" line."
+msgstr ""
+"Unidad de medida Airbus Helicopters. Este valor debe establecerse en cada"
+" línea de factura."
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_airbus_attached_file
+msgid "Attached file"
+msgstr "Archivo Adjunto"
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.fresko
+msgid "BILLING_CURRENCY"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_nestle_view
+msgid ""
+"Billing address information: street, colony, zip, city and state. Such "
+"information is taken from the invoice address contact configured for the "
+"partner."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields.selection,name:l10n_mx_edi_addendas.selection__res_config_settings__l10n_mx_addenda__bosh
+msgid "Bosh"
+msgstr "Bosh"
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.bosh
+msgid "CC"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.bosh
+msgid "CENTRO DE COSTOS"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.bosh
+msgid "CP"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields.selection,name:l10n_mx_edi_addendas.selection__res_config_settings__l10n_mx_addenda__calsonic_kansei
+msgid "Calsonic Kansei"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_aam_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_airbus_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_edumex_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_envases_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_femsa_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_ford_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_fresko_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_nestle_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_pepsico_view
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_chrysler_view
+msgid "Cancelaciones node"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_chrysler_view
+msgid "CargosCreditos node"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_bosh_cc
+msgid "Centro de costos"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields.selection,name:l10n_mx_edi_addendas.selection__res_config_settings__l10n_mx_addenda__chrysler
+msgid "Chrysler"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_chrysler_supplier_code
+msgid "Chrysler supplier code"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_bosh_cp
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.bosh
+msgid "Codigo Planta"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields.selection,name:l10n_mx_edi_addendas.selection__res_config_settings__l10n_mx_addenda__fresko
+msgid "Comercial City Fresko"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.envases
+msgid "Con_Pedido"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_airbus_concept
+msgid "Concept"
+msgstr "Concepto"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_airbus_concept
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_airbus_view
+msgid ""
+"Concept that is being invoiced, according to the catalog defined by Airbus."
+msgstr ""
+"Concepto que esta siendo facturado, según el catálogo definido por Airbus."
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_nissan_conducto
+msgid "Conducto"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model,name:l10n_mx_edi_addendas.model_res_config_settings
+msgid "Config Settings"
+msgstr "Opciones de Configuración"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_fresko_po_date
+msgid "Date Purchase Order"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_ahmsa_date_start
+msgid "Date start"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_ahmsa_date_stop
+msgid "Date stop"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_airbus_delivery_num
+msgid "Delivery Number"
+msgstr "Número de entrega"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_airbus_description
+msgid "Description"
+msgstr "Descripción"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_ahmsa_division
+msgid "Division"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_ahmsa_class_doc
+msgid "Document Class"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_ahmsa_type_doc
+msgid "Document Type"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields.selection,name:l10n_mx_edi_addendas.selection__res_config_settings__l10n_mx_addenda__edumex
+msgid "Edumex"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields.selection,name:l10n_mx_edi_addendas.selection__res_config_settings__l10n_mx_addenda__encinas
+msgid "Encinas"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields.selection,name:l10n_mx_edi_addendas.selection__res_config_settings__l10n_mx_addenda__envases
+msgid "Envases"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.envases
+msgid "Factura"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields.selection,name:l10n_mx_edi_addendas.selection__res_config_settings__l10n_mx_addenda__faurecia
+msgid "Faurecia"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields.selection,name:l10n_mx_edi_addendas.selection__res_config_settings__l10n_mx_addenda__femsa
+msgid "Femsa"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_ahmsa_fiscal_year
+msgid "Fiscal Year"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_ahmsa_fiscal_year
+msgid "Fiscal year to the account to pay."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields.selection,name:l10n_mx_edi_addendas.selection__res_config_settings__l10n_mx_addenda__flextronics
+msgid "Flextronics"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_porcelanite_folio_nota_recepcion
+msgid "Folio nota recepcion"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_porcelanite_folio_orden_compra
+msgid "Folio orden compra"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_chrysler_view
+msgid ""
+"For case of tag <b><i>unidadDeMedida</i></b> of the <b><i>part</i></b> node, its values were mapped in the view itself of the addenda,\n"
+"so if any change is necessary, it must be modified directly in Addenda view (modify the variable\n"
+"<i>&lt; t t-set = \"unit_m\" t-value = \"{'Unit (s)': 'EA'}\"/&gt;</i> where <i>Unit(s)</i> is the name of\n"
+"the unit of measure in ODOO and <i>EA</i> is its corresponding for Chrysler)."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_chrysler_view
+msgid "For more information about the addenda structure, visit the following"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields.selection,name:l10n_mx_edi_addendas.selection__res_config_settings__l10n_mx_addenda__ford
+msgid "Ford"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_ford_gsdb
+msgid "GSDB"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_ford_gsdb
+msgid ""
+"GSDB of the distributor (required, alphanumeric characters in upper case)."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_nestle_view
+msgid ""
+"If this is a credit note, specifies which invoice this credit note comes "
+"from. This value is taken from the field \"Source Document\"."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_edumex_incoming_code
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_envases_incoming_code
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_nestle_incoming_code
+msgid "Incoming Code"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_airbus_view
+msgid "Indicate the attached file if necessary (optional)."
+msgstr "Indique el archivo adjunto si es necesario (opcional)."
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_airbus_attached_file
+msgid "Indicate the attached file if necessary."
+msgstr "Indique el archivo adjunto si es necesario."
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_pepsico_payment_request
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_pepsico_view
+msgid ""
+"Indicates the number generated for the payment request to the services "
+"provider."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_aam_view
+msgid ""
+"Information of the person who made the requisition: name and e-mail. Such "
+"information is taken from the customer of the invoice."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.res_config_settings_view_form
+msgid "Install Selected Addenda"
+msgstr "Instalar la Adenda Seleccionada"
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.res_config_settings_view_form
+msgid "Installed Addendas"
+msgstr "Adendas Instaladas"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_aam_invoice_line_ids
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_airbus_invoice_line_ids
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_fresko_invoice_line_ids
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_nestle_invoice_line_ids
+msgid "Invoice Lines"
+msgstr "Líneas de factura"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_chrysler_cancelation
+msgid ""
+"Invoice number that it cancel and replace (Cancelaciones node)\n"
+"        "
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_chrysler_invoice
+msgid ""
+"Invoice number to which the charge or the credit refers to (Cargos Créditos node)\n"
+"        "
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_nestle_incoming_code
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_nestle_view
+msgid ""
+"Invoice validation code. This is applicable only for invoices, not credit "
+"notes."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_ford_view
+msgid ""
+"Invoices can include one or more ASN's. If it's not provided, it will be "
+"filled using the invoice's folio."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_ahmsa_reception
+msgid ""
+"Is the reception number in the customer system. If are many receptions, "
+"please separate this by a coma"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_ahmsa_service_sheet
+msgid "Is the service sheet number generated to the service that is invoiced."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_airbus_reception_num
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_airbus_view
+msgid "It is receiving number in the customer system."
+msgstr "Está recibiendo un número en el sistema del cliente."
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_ford_view
+msgid ""
+"It is the alphanumeric provider code established in the purchase order."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_airbus_purchase_order
+msgid "It is the purchase order number in the customer system."
+msgstr "Es el número de orden de compra en el sistema del cliente."
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_pepsico_reception
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_pepsico_view
+msgid "It is the reception number in the customer system."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_airbus_delivery_num
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_airbus_view
+msgid "It is the remission number or delivery note of the supplier."
+msgstr "Es el número de remisión o el albarán de entrega del proveedor."
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_nissan_kilos
+msgid "Kilos"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.field_res_config_settings__l10n_mx_addenda
+msgid "L10N Mx Addenda"
+msgstr "Adenda"
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_aam_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_airbus_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_fresko_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_nestle_view
+msgid "Line"
+msgstr "Línea"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_chrysler_line_amount
+msgid ""
+"Line amount (Cargos Créditos node)\n"
+"        "
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_aam_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_airbus_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_fresko_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_nestle_view
+msgid "Lines"
+msgstr "Línea"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields.selection,name:l10n_mx_edi_addendas.selection__res_config_settings__l10n_mx_addenda__mabe
+msgid "Mabe"
+msgstr "Mabe"
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.bosh
+msgid "NC"
+msgstr "NC"
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.bosh
+msgid "NOMBRE DEL REQUISITOR"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields.selection,name:l10n_mx_edi_addendas.selection__res_config_settings__l10n_mx_addenda__nestle
+msgid "Nestle"
+msgstr "Nestle"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields.selection,name:l10n_mx_edi_addendas.selection__res_config_settings__l10n_mx_addenda__nissan
+msgid "Nissan"
+msgstr "Nissan"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_bosh_nc
+msgid "Nombre del Requisidor"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_nissan_nroran
+msgid "Nro Ran"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_chrysler_consecutive
+msgid ""
+"Number of batch generated by CdM system (Cargos Créditos node)\n"
+"        "
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_chrysler_ref
+msgid ""
+"Number of reference generated by CdM system (Cargos Créditos node)\n"
+"        "
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.bosh
+msgid "OC"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_porcelanite_observaciones
+msgid "Observaciones"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_ahmsa_division
+msgid "Only apply when the society is S003"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_aam_operational_organization
+msgid "Operational Organization"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_bosh_oc
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.bosh
+msgid "Orden de Compra"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_fresko_order_number
+msgid "Order Number"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_pepsico_payment_request
+msgid "Payment Request"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields.selection,name:l10n_mx_edi_addendas.selection__res_config_settings__l10n_mx_addenda__pepsico
+msgid "PepsiCo"
+msgstr "PepsiCo"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_fresko_buyer
+msgid "Person or Department (Buyer)"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_nissan_view
+msgid "Picking information"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields.selection,name:l10n_mx_edi_addendas.selection__res_config_settings__l10n_mx_addenda__porcelanite
+msgid "Porcelanite"
+msgstr "Porcelanite"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.invoice_line_sap_sequence
+msgid ""
+"Position of the item in the purchase order. This value has to be set on each"
+" invoice line."
+msgstr ""
+"Posición del artículo en la orden de compra. Este valor debe establecerse en cada"
+" línea de factura."
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.invoice_line_supplier_code
+msgid ""
+"Product code as handled by the supplier. This value has to be set on each "
+"invoice line."
+msgstr ""
+"Código de producto manejado por el proveedor. Este valor debe establecerse en cada"
+" línea de factura."
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_airbus_purchase_order
+msgid "Purchase Order"
+msgstr "Orden de compra"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_chrysler_po
+msgid ""
+"Purchase order number\n"
+"        "
+msgstr ""
+"Número de orden de compra\n"
+"        "
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_fresko_order_number
+msgid ""
+"Purchase order number that supports the receipt of merchandise. This number "
+"is displayed in the Provecomer portal."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_nissan_ctdtar
+msgid "Qty Tarimas"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.fresko
+msgid "RETENIDO"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_faurecia_reception
+msgid "Reception"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_ahmsa_reception
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_airbus_reception_num
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_femsa_reception
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_pepsico_reception
+msgid "Reception Number"
+msgstr "Número de recepción"
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_airbus_view
+msgid ""
+"Required for expense accounts / notes position with customs (optional)."
+msgstr ""
+"Requerido para la posición de cuentas de gastos / notas con aduanas (opcional)."
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_ahmsa_trasport
+msgid "Required for the invoices with reference (2) and with class (FV)."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_ahmsa_date_start
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_ahmsa_date_stop
+msgid "Required to consignment invoices."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.invoice_line_sap_code
+msgid "SAP Code"
+msgstr "Código SAP"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.invoice_line_sap_description
+msgid "SAP Description"
+msgstr "Descripción SAP"
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_aam_view
+msgid ""
+"SAP information of the product, as handled by AAM: description, code and "
+"unit of measure. This information has to be set on each invoice line."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_nissan_view
+msgid "Sales information"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields.selection,name:l10n_mx_edi_addendas.selection__res_config_settings__l10n_mx_addenda__sanmina
+msgid "Sanmina"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.invoice_line_sap_sequence
+msgid "Sap Sequence"
+msgstr "Secuencia Sap"
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.res_config_settings_view_form
+msgid ""
+"Select which addenda you will need from the\n"
+"                            list. (PAC)."
+msgstr ""
+"Seleccione de la lista la addenda que\n"
+"necesite. (PAC)."
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_ahmsa_service_sheet
+msgid "Service Sheet"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_aam_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_ahmsa_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_airbus_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_bosh_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_chrysler_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_edumex_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_envases_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_faurecia_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_femsa_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_ford_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_fresko_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_nestle_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_nissan_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_pepsico_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_porcelanite_view
+msgid "Set Values"
+msgstr "Establecer Valore"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.server,name:l10n_mx_edi_addendas.set_addenda_aam_values
+msgid "Set Values Addenda AAM"
+msgstr "Establecer Valores en Addenda AAM"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.server,name:l10n_mx_edi_addendas.set_addenda_ahmsa_values
+msgid "Set Values Addenda Ahmsa"
+msgstr "Establecer Valores en Addenda Ahmsa"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.server,name:l10n_mx_edi_addendas.set_addenda_airbus_values
+msgid "Set Values Addenda Airbus"
+msgstr "Establecer Valores en Addenda Airbus"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.server,name:l10n_mx_edi_addendas.set_addenda_faurecia_values
+msgid "Set Values Addenda Faurecia"
+msgstr "Establecer Valores en Addenda Faurecia"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.server,name:l10n_mx_edi_addendas.set_addenda_femsa_values
+msgid "Set Values Addenda Femsa"
+msgstr "Establecer Valores en Addenda Femsa"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.server,name:l10n_mx_edi_addendas.set_addenda_ford_values
+msgid "Set Values Addenda Ford"
+msgstr "Establecer Valores en Addenda Ford"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.server,name:l10n_mx_edi_addendas.set_addenda_fresko_values
+msgid "Set Values Addenda Fresko"
+msgstr "Establecer Valores en Addenda Fresko"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.server,name:l10n_mx_edi_addendas.set_addenda_nestle_values
+msgid "Set Values Addenda Nestle"
+msgstr "Establecer Valores en Addenda Nestle"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.server,name:l10n_mx_edi_addendas.set_addenda_pepsico_values
+msgid "Set Values Addenda PepsiCo"
+msgstr "Establecer Valores en Addenda Pepsico"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.server,name:l10n_mx_edi_addendas.set_addenda_bosh_values
+msgid "Set Values Addenda bosh"
+msgstr "Establecer Valores en Addenda bosh"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.server,name:l10n_mx_edi_addendas.set_addenda_chrysler_values
+msgid "Set Values Addenda chrysler"
+msgstr "Establecer Valores en Addenda chrysler"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.server,name:l10n_mx_edi_addendas.set_addenda_nissan_values
+msgid "Set Values Addenda nissan"
+msgstr "Establecer Valores en Addenda nissan"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.server,name:l10n_mx_edi_addendas.set_addenda_porcelanite_values
+msgid "Set Values Addenda porcelanite"
+msgstr "Establecer Valores en Addenda porcelanite"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.server,name:l10n_mx_edi_addendas.set_addenda_envases_values
+msgid "Set Values for Addenda Envases"
+msgstr "Establecer Valores en Addenda Envases"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.server,name:l10n_mx_edi_addendas.set_addenda_edumex_values
+msgid "Set Values for Addenda edumex"
+msgstr "Establecer Valores en Addenda edumex"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.server,name:l10n_mx_edi_addendas.action_addenda_aam_defaults
+msgid "Set default values for the addenda AAM"
+msgstr "Establecer valores predeterminados para la addenda AAM"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.server,name:l10n_mx_edi_addendas.action_addenda_airbus_defaults
+msgid "Set default values for the addenda Airbus"
+msgstr "Establecer valores predeterminados para la addenda Airbus"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.server,name:l10n_mx_edi_addendas.action_addenda_edumex_defaults
+msgid "Set default values for the addenda Edumex"
+msgstr "Establecer valores predeterminados para la addenda Edumex"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.server,name:l10n_mx_edi_addendas.action_addenda_envases_defaults
+msgid "Set default values for the addenda Envases"
+msgstr "Establecer valores predeterminados para la addenda Envases"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.server,name:l10n_mx_edi_addendas.action_addenda_femsa_defaults
+msgid "Set default values for the addenda Femsa"
+msgstr "Establecer valores predeterminados para la addenda Femsa"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.server,name:l10n_mx_edi_addendas.action_addenda_ford_defaults
+msgid "Set default values for the addenda Ford"
+msgstr "Establecer valores predeterminados para la addenda Ford"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.server,name:l10n_mx_edi_addendas.action_addenda_fresko_defaults
+msgid "Set default values for the addenda Fresko"
+msgstr "Establecer valores predeterminados para la addenda Fresko"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.server,name:l10n_mx_edi_addendas.action_addenda_nestle_defaults
+msgid "Set default values for the addenda Nestle"
+msgstr "Establecer valores predeterminados para la addenda Nestle"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.server,name:l10n_mx_edi_addendas.action_addenda_pepsico_defaults
+msgid "Set default values for the addenda PepsiCo"
+msgstr "Establecer valores predeterminados para la addenda PepsiCo"
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_nestle_view
+msgid ""
+"Shipping address information: street, colony, zip, city and state. Such "
+"information is taken from the shipping address contact configured for the "
+"partner."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields.selection,name:l10n_mx_edi_addendas.selection__res_config_settings__l10n_mx_addenda__sidel
+msgid "Sidel"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.invoice_line_supplier_code
+msgid "Supplier Code"
+msgstr "Código de proveedor"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.company_chrysler_field
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.company_nissan_field
+msgid "Supplier code"
+msgstr "Código de proveedor"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.company_chrysler_field
+msgid "Supplier code for Chrysler"
+msgstr "Código de proveedor para Chrysler"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.company_nissan_field
+msgid "Supplier code for nissan"
+msgstr "Código de proveedor para nissan"
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.fresko
+msgid "TRANSFERIDO"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_chrysler_view
+msgid ""
+"Tag <b><i>cancelaSustituye</i></b> (<b><i>cancelaciones</i></b> node): "
+"Invoice number that it cancel and replace."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_chrysler_view
+msgid ""
+"Tag <b><i>consecutivo</i></b> (<b><i>cargosCreditos</i></b> node): Number of"
+" batch generated by CdM system."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_chrysler_view
+msgid ""
+"Tag <b><i>factura</i></b> (<b><i>cargosCreditos</i></b> node): Invoice "
+"number to which the charge or the credit refers to."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_chrysler_view
+msgid ""
+"Tag <b><i>montoLinea</i></b> (<b><i>cargosCreditos</i></b> node): Line "
+"amount."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_chrysler_view
+msgid ""
+"Tag <b><i>ordenCompra</i></b> (<b><i>references</i></b> node): Purchase "
+"order number."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_chrysler_view
+msgid ""
+"Tag <b><i>referenciaChrysler</i></b> (<b><i>cargosCreditos</i></b> node): "
+"Number of reference generated by CdM system."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_nissan_tarimas
+msgid "Tarimas"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_airbus_view
+msgid "Text that briefly describes the invoice."
+msgstr "Texto que describe brevemente la factura."
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_envases_incoming_code
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_envases_view
+msgid ""
+"The code given to the product when it arrives at stock location. This code "
+"is provided by the customer."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_edumex_incoming_code
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_femsa_reception
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_edumex_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_femsa_view
+msgid ""
+"The code given to the product when it arrives at stock location. This code "
+"is provided by the supplier."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_nissan_view
+msgid ""
+"The corresponding XML will appears with the addenda information.\n"
+"This information is taken from the fields that are explicitly included\n"
+"in the invoice, and for the case that the information is not in a specific\n"
+"field, it is necessary to fill the fields here."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_fresko_po_date
+msgid "The date of the purchase order."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_edumex_view
+msgid ""
+"The necessary nodes for the implementation of the Addenda of\n"
+"                        Edumex, S.A. de C.V. are:"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_aam_view
+msgid ""
+"The necessary nodes for the implementation of the Addenda of AAM Maquiladora"
+" México, S. de R.L. de C.V. are:"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_airbus_view
+msgid ""
+"The necessary nodes for the implementation of the Addenda of Airbus are:"
+msgstr ""
+"Los nodos necesarios para la implementación de la Addenda de Airbus son:"
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_envases_view
+msgid ""
+"The necessary nodes for the implementation of the Addenda of Envases "
+"Universales de México, S.A.P.I. de C.V. are:"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_femsa_view
+msgid ""
+"The necessary nodes for the implementation of the Addenda of Fomento "
+"Económico Mexicano, S.A.B. de C.V. (FEMSA) are:"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_ford_view
+msgid ""
+"The necessary nodes for the implementation of the Addenda of Ford Motor "
+"Company of Mexico are:"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_fresko_view
+msgid ""
+"The necessary nodes for the implementation of the Addenda of Fresko City"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_nestle_view
+msgid ""
+"The necessary nodes for the implementation of the Addenda of Nestle Mexico, "
+"S.A. De C.V. are:"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_pepsico_view
+msgid ""
+"The necessary nodes for the implementation of the Addenda of PepsiCo Mexico "
+"are:"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_aam_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_airbus_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_envases_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_femsa_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_nestle_view
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_pepsico_view
+msgid ""
+"The number of the customer's purchase order. This value is taken from the "
+"invoice's field \"Reference/Description\"."
+msgstr ""
+"El número de la orden de compra del cliente. Este valor se toma del "
+" campo de la factura \"Referencia/Descripción \"."
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_airbus_view
+msgid ""
+"The number of the invoice's pedimentos. This value is taken from the invoice"
+" line's field \"Customs number\" (optional)."
+msgstr ""
+"El número de los pedimentos de la factura. Este valor se toma del campo"
+" de la línea de factura \"Número de aduana\" (opcional)."
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.invoice_line_sap_code
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_nestle_view
+msgid ""
+"The product's SAP code as handled by the customer. This value has to be set "
+"on each invoice line."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.invoice_line_sap_description
+msgid ""
+"The product's SAP description as handled by the customer. This value has to "
+"be set on each invoice line."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_femsa_view
+msgid ""
+"The sale order which this invoice comes from. This value is taken from the "
+"field \"Source Document\"."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_airbus_type_operation
+msgid ""
+"The type of operation is indicated, if it is IMPORT or EXPORT. Required for "
+"expense accounts / notes position."
+msgstr ""
+"Se indica el tipo de operación, si es IMPORTACIÓN o EXPORTACIÓN. Requerido para "
+" cuentas de gastos / notas de cargo."
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.product_supplierinfo_sap_uom
+msgid "The unit of measure's code as handled by the supplier."
+msgstr "El código de la unidad de medida manejado por el proveedor."
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_nissan_view
+msgid ""
+"This information is getting from the sale order. If there's not an order "
+"related to this invoice, you can fill this information in the following "
+"invoice fields:"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_nissan_view
+msgid ""
+"This information is gotten from the picking related to this invoice. If it's"
+" not found, you can fill these fields to complete that information."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_chrysler_supplier_code
+msgid ""
+"This is the code of company for Chrysler\n"
+"        "
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_ahmsa_trasport
+msgid "Transport"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_airbus_type_operation
+msgid "Type Operation"
+msgstr "Tipo de Operación"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.invoice_line_sap_uom
+msgid "UoM"
+msgstr "UoM"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.product_supplierinfo_sap_uom
+msgid "UoM Code"
+msgstr "Código UoM"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_nissan_conducto
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.wizard_nissan_kilos
+msgid "Used only when the information is not found in the picking."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.invoice_chrysler_field
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.invoice_nissan_field
+msgid "Used to concatenate fields in addenda wizard"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.invoice_ford_field
+msgid "Used to concatenate fields x_gsdb and x_asn"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.invoice_ahmsa_field
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.invoice_airbus_field
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.invoice_bosh_field
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.invoice_faurecia_field
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.invoice_femsa_field
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.invoice_fresko_field
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.invoice_pepsico_field
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.invoice_porcelanite_field
+msgid "Used to concatenate wizard fields"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.invoice_edumex_field
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.invoice_envases_field
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.invoice_nestle_field
+msgid "Used to store the field x_incoming_code"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,help:l10n_mx_edi_addendas.invoice_aam_field
+msgid "Used to store the field x_operational_organization"
+msgstr "Se usa para concatenar campos del asistente"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields.selection,name:l10n_mx_edi_addendas.selection__res_config_settings__l10n_mx_addenda__vallen
+msgid "Vallen"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.actions.act_window,name:l10n_mx_edi_addendas.action_ui_view
+msgid "Views"
+msgstr "Vistas"
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.actions.act_window,help:l10n_mx_edi_addendas.action_ui_view
+msgid ""
+"Views allows you to personalize each view of Odoo. You can add new fields, "
+"move fields, rename them or delete the ones that you do not need."
+msgstr ""
+"La entrada 'Vistas' le permite personalizar cada vista de Odoo. Puede añadir nuevos campos, "
+"moverlos, renombrarlos o borrar los que no necesite"
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_chrysler_view
+msgid ""
+"When signing an invoice, the corresponding xml will appears with the addenda information. This information is taken\n"
+"from the fields that are explicitly included in the invoice, and for the case that the information is not in a specific field,\n"
+"it is necessary to fill the fields here."
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields.selection,name:l10n_mx_edi_addendas.selection__res_config_settings__l10n_mx_addenda__yanfeng
+msgid "Yanfeng"
+msgstr "Yanfeng"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields.selection,name:l10n_mx_edi_addendas.selection__res_config_settings__l10n_mx_addenda__zfmexico
+msgid "ZF Mexico"
+msgstr "ZF Mexico"
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_chrysler_cancelation
+msgid "cancelaSustituye"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_chrysler_consecutive
+msgid "consecutivo"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_chrysler_invoice
+msgid "factura"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model_terms:ir.ui.view,arch_db:l10n_mx_edi_addendas.wizard_chrysler_view
+msgid "link"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_chrysler_line_amount
+msgid "montoLinea"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_chrysler_po
+msgid "ordenCompra"
+msgstr ""
+
+#. module: l10n_mx_edi_addendas
+#: model:ir.model.fields,field_description:l10n_mx_edi_addendas.wizard_chrysler_ref
+msgid "referenciaChrysler"
+msgstr ""

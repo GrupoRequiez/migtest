@@ -1,6 +1,6 @@
 {
     "name": "Requiez Instance",
-    "author": "Vauxoo, Humanytek",
+    "author": "Vauxoo, Humanytek, gflores",
     "summary": """
     All the necessary modules to auto install our service instance
     """,
@@ -12,7 +12,7 @@
         "account_asset",
         "account_budget",
         "account_online_sync",
-        # "account_followup",
+        "account_followup",
         "base_import_module",
         "board",
         "calendar",
@@ -90,7 +90,7 @@
         "view/sale_view.xml",
         "view/account_invoice_view.xml",
         "view/stock_picking_views.xml",
-        "view/stock_location_views.xml",
+        "view/stock_move_view.xml",
         "view/template.xml",
         "view/mrp_production_views.xml",
         "wizard/upload_forecast_view.xml",
@@ -105,13 +105,14 @@
         "report/report_invoice.xml",
         "report/purchase_order_templates.xml",
         "report/purchase_quotation_templates.xml",
-        "report/mrp_mps_report_templates.xml",
     ],
     "demo": [
     ],
     "test": [
     ],
-    "qweb": [],
+    "qweb": [
+        "static/src/xml/qweb_teplates.xml",
+    ],
     "pre_init_hook": "pre_init_hook",
     "auto_install": False,
     "application": True,

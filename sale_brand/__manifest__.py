@@ -19,21 +19,20 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ###############################################################################
-
 {
     'name': "Sale Order - Brand",
     'summary': """
     """,
     'description': """
     """,
-    'author': "Humanytek",
+    'author': "Humanytek, gflores",
     'website': "http://www.humanytek.com",
     'category': 'Sale',
     'version': '1.0.0',
     'depends': ['sale', 'product_brand', 'account'],
     'data': [
         'view/sale_view.xml',
-        'view/account_invoice_view.xml',
+        'view/account_move_view.xml',
     ],
     'demo': [
     ],
