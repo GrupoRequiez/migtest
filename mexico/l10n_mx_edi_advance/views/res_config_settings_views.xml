@@ -11,15 +11,15 @@
                     <div class="o_setting_right_pane">
                         <span class="o_form_label">Advances</span>
                         <div class="text-muted">
-                            Product and journal that will be used to create the advances automatically.
+                            Parameters that will be used to create the advances automatically.
                         </div>
                         <div class="row mt16">
                             <label string="Product" for="l10n_mx_edi_product_advance_id" class="col-lg-3 o_light_label"/>
                             <field name="l10n_mx_edi_product_advance_id"/>
                         </div>
                         <div class="row">
-                            <label string="Journal" for="l10n_mx_edi_journal_advance_id" class="col-lg-3 o_light_label"/>
-                            <field name="l10n_mx_edi_journal_advance_id"/>
+                            <label string="Process" for="l10n_mx_edi_advance" class="col-lg-3 o_light_label"/>
+                            <field name="l10n_mx_edi_advance"/>
                         </div>
                     </div>
                 </div>

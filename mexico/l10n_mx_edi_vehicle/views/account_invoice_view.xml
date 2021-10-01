@@ -20,7 +20,7 @@
                         <separator colspan="2" string="Used Vehicles" attrs="{'invisible':[('l10n_mx_edi_decree_type', '!=', '01')]}"/>
                         <field name="l10n_mx_edi_vehicle_ids" nolabel="1" attrs="{'invisible':[('l10n_mx_edi_decree_type', '!=', '01')]}" groups="fleet.fleet_group_user"/>
                     </group>
-                    <group string="Vehicle to sale" attrs="{'invisible':['|', ('l10n_mx_edi_complement_type', '!=', 'sale'), ('type', '!=', 'out_invoice')]}" groups="fleet.fleet_group_user">
+                    <group string="Vehicle to sale" attrs="{'invisible':['|', ('l10n_mx_edi_complement_type', '!=', 'sale'), ('move_type', '!=', 'out_invoice')]}" groups="fleet.fleet_group_user">
                         <field name="l10n_mx_edi_vehicle_id"/>
                     </group>
                     <group string="Natural Person member of the coordinated" attrs="{'invisible':[('l10n_mx_edi_complement_type', '!=', 'pfic')]}">

@@ -3,7 +3,7 @@
     'name': 'EDI Complement Destruction Certificate, Vehicle Renew and '
     'Substitution, Used Vehicle Sale, Natural person member of the '
     'coordinated, and Vehicle Sale concept complement.',
-    'version': '13.0.1.0.0',
+    'version': '14.0.1.0.0',
     "author": "Vauxoo",
     "license": "LGPL-3",
     'category': 'Hidden',

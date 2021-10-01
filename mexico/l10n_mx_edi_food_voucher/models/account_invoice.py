@@ -6,7 +6,7 @@ class AccountMove(models.Model):
     _inherit = 'account.move'
 
     def invoice_validate(self):
-        for record in self.filtered(lambda r: r.l10n_mx_edi_is_required()):
+        for record in self.l10n_mx_edi_cfdi_request in ('on_invoice', 'on_refund'):
             if record.invoice_line_ids.filtered(lambda r: r.l10n_mx_edi_voucher_id and r.quantity != 0): # noqa
                 record.message_post(
                     body=_(

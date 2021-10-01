@@ -2,7 +2,7 @@
 
 {
     'name': 'Odoo Mexico Localization Customs for DIOT',
-    'version': '13.0.1.0.0',
+    'version': '14.0.1.0.0',
     'author': 'Vauxoo',
     'category': 'Accounting',
     'license': 'OEEL-1',
@@ -19,6 +19,7 @@
         'views/res_partner_view.xml',
     ],
     'demo': [
+        'demo/account_account_demo.xml',
     ],
     'qweb': [
     ],

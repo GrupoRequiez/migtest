@@ -7,7 +7,7 @@
         Adds the ability of downloading, generating your e-invoices
         using your ticket number.
     """,
-    "version": "13.0.1.0.0",
+    "version": "14.0.1.0.0",
     "author": "Vauxoo",
     "category": "Website",
     "website": "http://www.vauxoo.com/",

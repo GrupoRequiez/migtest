@@ -1,22 +1,19 @@
 # Copyright 2018 Vauxoo
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl).
 
-import base64
 import os
 
-from lxml import objectify
+from lxml.objectify import fromstring
 
 from odoo import tools
-from odoo.addons.l10n_mx_edi.tests.common import InvoiceTransactionCase
+from odoo.addons.l10n_mx_edi.tests.common import TestMxEdiCommon
 
 
-class Test3rdParty(InvoiceTransactionCase):
+class Test3rdParty(TestMxEdiCommon):
 
     def setUp(self):
         super(Test3rdParty, self).setUp()
-        self.isr_tag = self.env['account.account.tag'].search(
-            [('name', '=', 'ISR')])
-        self.tax_negative.tag_ids |= self.isr_tag
+        self.certificate._check_credentials()
         self.namespaces = {
             'cfdi': 'http://www.sat.gob.mx/cfd/3',
             'terceros': 'http://www.sat.gob.mx/terceros',
@@ -51,13 +48,12 @@ class Test3rdParty(InvoiceTransactionCase):
            first hand.
         3. The product is a lease
         """
-        invoice = self.create_invoice()
+        invoice = self.invoice
 
         # Case 1: the product is imported and sold first hand
         imported_product = self.env.ref('product.product_product_24')
         imported_product.write({
-            'l10n_mx_edi_code_sat_id':
-                self.ref('l10n_mx_edi.prod_code_sat_43201401'),
+            'unspsc_code_id': self.ref('product_unspsc.unspsc_code_43201401'),
         })
         line = self.create_invoice_line_to_3rd(invoice, imported_product)
         line.l10n_mx_edi_customs_number = '15  48  3009  0001234'
@@ -77,15 +73,15 @@ class Test3rdParty(InvoiceTransactionCase):
         lease_product = self.env.ref('product.service_cost_01')
         lease_product.write({
             'name': 'House Lease',
-            'l10n_mx_edi_code_sat_id':
-                self.ref('l10n_mx_edi.prod_code_sat_80131501'),
+            'unspsc_code_id': self.ref('product_unspsc.unspsc_code_80131501'),
             'l10n_mx_edi_property_tax': 'CP1234',
         })
         self.create_invoice_line_to_3rd(invoice, lease_product)
-        invoice.action_invoice_open()
-        self.assertEqual(invoice.l10n_mx_edi_pac_status, "signed",
-                         invoice.message_ids.mapped('body'))
-        xml = objectify.fromstring(base64.b64decode(invoice.l10n_mx_edi_cfdi))
+        invoice.action_post()
+        generated_files = self._process_documents_web_services(self.invoice, {'cfdi_3_3'})
+        self.assertTrue(generated_files)
+        self.assertEqual(invoice.edi_state, "sent", invoice.message_ids.mapped('body'))
+        xml = fromstring(generated_files[0])
         self.assertEqual(
             len(xml.Conceptos.Concepto), 4,
             "There should be exactly four nodes 'Concepto'")
@@ -112,7 +108,7 @@ class Test3rdParty(InvoiceTransactionCase):
 
         xmlpath = os.path.join(os.path.dirname(__file__), 'expected_nodes.xml')
         with tools.file_open(xmlpath, mode='rb') as xmlfile:
-            xml_expected = objectify.fromstring(xmlfile.read())
+            xml_expected = fromstring(xmlfile.read())
         nodes_expected = xml_expected.findall(
             'terceros:PorCuentadeTerceros', namespaces=self.namespaces)
         self.assertEqualXML(node1, nodes_expected[0])

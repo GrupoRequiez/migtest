@@ -3,10 +3,10 @@
 from datetime import timedelta
 from odoo.tests.common import Form
 
-from odoo.addons.l10n_mx_edi.tests.common import InvoiceTransactionCase
+from odoo.addons.l10n_mx_edi.tests.common import TestMxEdiCommon
 
 
-class TestL10nMxTaxCashBasis(InvoiceTransactionCase):
+class TestL10nMxTaxCashBasis(TestMxEdiCommon):
 
     def setUp(self):
         super(TestL10nMxTaxCashBasis, self).setUp()
@@ -15,9 +15,12 @@ class TestL10nMxTaxCashBasis(InvoiceTransactionCase):
         self.register_payments_model = self.env['account.payment.register']
         self.today = (self.env['l10n_mx_edi.certificate'].sudo().
                       get_mx_current_datetime())
-        self.company.write({'currency_id': self.mxn.id})
-        self.tax_cash_basis_journal_id = self.company.tax_cash_basis_journal_id
-        self.curr_ex_journal_id = self.company.currency_exchange_journal_id
+        self.mxn = self.env.ref('base.MXN')
+        self.usd = self.env.ref('base.USD')
+        company = self.invoice.company_id
+        company.write({'currency_id': self.mxn.id})
+        self.tax_cash_basis_journal_id = company.tax_cash_basis_journal_id
+        self.curr_ex_journal_id = company.currency_exchange_journal_id
         self.user_type_id = self.env.ref(
             'account.data_account_type_current_liabilities')
         self.payment_method_manual_out = self.env.ref(
@@ -36,33 +39,33 @@ class TestL10nMxTaxCashBasis(InvoiceTransactionCase):
             '77777777', 'Cash Tax Account')
         account_tax_cash_basis = self.create_account(
             '99999999', 'Tax Base Account')
-        self.tax_positive.write({
+        self.tax_16.write({
             'tax_exigibility': 'on_payment',
             'type_tax_use': 'purchase',
             'cash_basis_transition_account_id': cash_tax_account.id,
-            'cash_basis_base_account_id': account_tax_cash_basis.id
         })
-        self.tax_positive.invoice_repartition_line_ids.write({'account_id': self.tax_account.id,
-                                                              'tag_ids': [(6, 0, [self.iva_tag.id])]})
-        self.tax_positive.refund_repartition_line_ids.write({'account_id': self.tax_account.id,
-                                                             'tag_ids': [(6, 0, [self.iva_tag.id])]})
-        self.product.supplier_taxes_id = [self.tax_positive.id]
+        self.tax_16.company_id.write({
+            'account_cash_basis_base_account_id': account_tax_cash_basis.id,
+        })
+        self.tax_16.invoice_repartition_line_ids.write({'account_id': self.tax_account.id})
+        self.tax_16.refund_repartition_line_ids.write({'account_id': self.tax_account.id})
+        self.product.supplier_taxes_id = [self.tax_16.id]
 
         self.set_currency_rates(mxn_rate=21, usd_rate=1)
 
     def create_payment(self, invoice, date, journal, currency):
         payment_method_id = self.payment_method_manual_out
-        if invoice.type == 'in_invoice':
+        if invoice.move_type == 'in_invoice':
             payment_method_id = self.payment_method_manual_in
         ctx = {'active_model': 'account.move', 'active_ids': invoice.ids}
         payment_register = Form(self.env['account.payment'].with_context(ctx))
-        payment_register.payment_date = date
+        payment_register.date = date
         payment_register.currency_id = currency
         payment_register.journal_id = journal
         payment_register.payment_method_id = payment_method_id
-        payment_register.l10n_mx_edi_payment_method_id = self.payment_method_cash
+        payment_register.l10n_mx_edi_payment_method_id = self.env.ref('l10n_mx_edi.payment_method_efectivo')
         payment = payment_register.save()
-        payment.post()
+        payment.action_post()
         return payment
 
     def delete_journal_data(self):
@@ -71,7 +74,7 @@ class TestL10nMxTaxCashBasis(InvoiceTransactionCase):
         """
 
         # 1. Reset to draft moves (invoices), so some records may be deleted
-        company = self.company
+        company = self.invoice.company_id
         moves = self.env['account.move'].search(
             [('company_id', '=', company.id)])
         moves.button_draft()
@@ -81,8 +84,6 @@ class TestL10nMxTaxCashBasis(InvoiceTransactionCase):
             'account.bank.statement']
         for model in models_to_clear:
             records = self.env[model].search([('company_id', '=', company.id)])
-            if model == 'account.payment':
-                records.write({'move_name': False})
             records.unlink()
 
     def create_account(self, code, name, user_type_id=False):
@@ -109,10 +110,11 @@ class TestL10nMxTaxCashBasis(InvoiceTransactionCase):
         self.assertFalse(cash_am_ids, 'There should be no journal entry')
 
         invoice_date = self.today - timedelta(days=1)
-        invoice_id = self.create_invoice(
-            inv_type='in_invoice',
-            currency_id=self.usd.id,
-        )
+        invoice_id = self.invoice
+        invoice_id.write({
+            'move_type': 'in_invoice',
+            'currency_id': self.env.ref('base.USD'),
+        })
 
         invoice_id.write({'date': invoice_date.date(), 'invoice_date': invoice_date.date()})
         invoice_id.line_ids.unlink()
@@ -125,7 +127,7 @@ class TestL10nMxTaxCashBasis(InvoiceTransactionCase):
             'price_unit': 450,
             'product_uom_id': self.product.uom_id.id,
             'name': self.product.name,
-            'tax_ids': [(6, 0, self.tax_positive.ids)],
+            'tax_ids': [(6, 0, self.tax_16.ids)],
         })]
         invoice_id.action_post()
         self.create_payment(invoice_id, self.today, self.bank_journal_mxn, self.usd)
@@ -133,7 +135,7 @@ class TestL10nMxTaxCashBasis(InvoiceTransactionCase):
         cash_am_ids = self.env['account.move'].search(
             [('journal_id', 'in', [self.tax_cash_basis_journal_id.id,
                                    self.curr_ex_journal_id.id])])
-        self.assertEquals(
+        self.assertEqual(
             len(cash_am_ids), 2, 'There should be Two journal entry')
 
         invoice_id.line_ids.sudo().remove_move_reconcile()
@@ -145,7 +147,7 @@ class TestL10nMxTaxCashBasis(InvoiceTransactionCase):
 
     def test_reverting_exchange_difference_from_non_mxn(self):
         self.delete_journal_data()
-        self.company.write({
+        self.invoice.company_id.write({
             'currency_id': self.usd.id,
             'country_id': self.env.ref('base.us').id,
         })
@@ -157,10 +159,11 @@ class TestL10nMxTaxCashBasis(InvoiceTransactionCase):
         self.assertFalse(cash_am_ids, 'There should be no journal entry')
 
         invoice_date = self.today - timedelta(days=1)
-        invoice_id = self.create_invoice(
-            inv_type='in_invoice',
-            currency_id=self.mxn.id,
-        )
+        invoice_id = self.invoice
+        invoice_id.write({
+            'move_type': 'in_invoice',
+            'currency_id': self.env.ref('base.MXN'),
+        })
 
         invoice_id.write({'date': invoice_date.date(), 'invoice_date': invoice_date.date()})
         invoice_id.line_ids.unlink()
@@ -173,7 +176,7 @@ class TestL10nMxTaxCashBasis(InvoiceTransactionCase):
             'price_unit': 450,
             'product_uom_id': self.product.uom_id.id,
             'name': self.product.name,
-            'tax_ids': [(6, 0, self.tax_positive.ids)],
+            'tax_ids': [(6, 0, self.tax_16.ids)],
         })]
         invoice_id.action_post()
         self.create_payment(invoice_id, self.today, self.bank_journal_mxn, self.mxn)
@@ -191,3 +194,12 @@ class TestL10nMxTaxCashBasis(InvoiceTransactionCase):
                                    self.curr_ex_journal_id.id])])
 
         self.assertEqual(len(cash_am_ids), 4, 'There should be Four journal entry')
+
+    def set_currency_rates(self, mxn_rate, usd_rate):
+        date = (self.env['l10n_mx_edi.certificate'].sudo().get_mx_current_datetime().date())
+        self.mxn.rate_ids.filtered(lambda r: r.name == date).unlink()
+        self.mxn.rate_ids = self.env['res.currency.rate'].create({
+            'rate': mxn_rate, 'name': date, 'currency_id': self.mxn.id})
+        self.usd.rate_ids.filtered(lambda r: r.name == date).unlink()
+        self.usd.rate_ids = self.env['res.currency.rate'].create({
+            'rate': usd_rate, 'name': date, 'currency_id': self.usd.id})

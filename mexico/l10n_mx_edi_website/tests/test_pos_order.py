@@ -9,19 +9,13 @@ class TestTicketInvoicing(TestPointOfSaleCommon):
 
     def setUp(self):
         super(TestTicketInvoicing, self).setUp()
+        self.certificate._check_credentials()
         self.order_obj = self.env['pos.order']
         self.partner_obj = self.env['res.partner']
         self.company = self.env.ref('base.main_company')
-        self.led_lamp.l10n_mx_edi_code_sat_id = self.ref(
-            "l10n_mx_edi.prod_code_sat_50402500")
-        self.tax_positive = self.env['account.tax'].search([
-            ('name', '=', 'IVA(16%) VENTAS')
-            ], limit=1)
-        self.tax_positive.l10n_mx_cfdi_tax_type = 'Tasa'
         self.led_lamp.write({
-            'l10n_mx_edi_code_sat_id': self.ref(
-                "l10n_mx_edi.prod_code_sat_39112102"),
-            'taxes_id': [(6, 0, self.tax_positive.ids)],
+            'unspsc_code_id': self.ref('product_unspsc.unspsc_code_39112102'),
+            'taxes_id': [(6, 0, self.tax_16.ids)],
         })
         self.vat_valid = 'VA&111017CG9'
         self.partner4.vat = self.vat_valid
@@ -205,8 +199,9 @@ class TestTicketInvoicing(TestPointOfSaleCommon):
         self.assertEqual(session.l10n_mx_edi_pac_status, "signed",
                          session.message_ids.mapped('body'))
         invoice = self.order_obj.invoice_sale(ticket_number)
-        self.assertEqual(invoice.l10n_mx_edi_pac_status, "signed",
-                         invoice.message_ids.mapped('body'))
+        generated_files = self._process_documents_web_services(self.invoice, {'cfdi_3_3'})
+        self.assertTrue(generated_files)
+        self.assertEqual(invoice.edi_state, "sent", invoice.message_ids.mapped('body'))
         self.assertEqual(invoice.state, 'paid', 'Invoice should be paid')
 
     def _test_010_misconfigured_and_retry(self):

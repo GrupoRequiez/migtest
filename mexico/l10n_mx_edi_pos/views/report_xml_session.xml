@@ -21,10 +21,10 @@
                     </div>
                     <div class="row" style="font-size:9px">
                         <div class="col-4" style="padding-top: 0.3em; padding-bottom: 0.3em;">
-                            <span t-esc="cfdi.get('FormaPago', 'NA')"/>
+                            <span t-esc="payment_method"/>
                         </div>
                         <div class="col-4" style="padding-top: 0.3em; padding-bottom: 0.3em;">
-                            <span t-esc="cfdi.Receptor.get('UsoCFDI', 'NA')"/>
+                            <span t-esc="usage"/>
                         </div>
                         <div class="col-4" style="padding-top: 0.3em; padding-bottom: 0.3em;">
                             <span t-esc="'Ingreso' if cfdi.get('TipoDeComprobante', 'NA') == 'I' else 'Egreso'"/>
@@ -78,7 +78,7 @@
                 </div>
                 <div class="row">
                     <div class="col-12 text-center" style="font-size:8px">
-                        <span>THE PAYMENT OF THIS INVOICE IS </span><span t-esc="cfdi.get('formaDePago', cfdi.get('MetodoPago', '')).upper()"/>,
+                        <span>THE PAYMENT OF THIS INVOICE IS </span><span t-esc="payment_method.upper()"/>,
                         <span>PLACE OF EXPEDITION </span><span t-esc="cfdi.get('LugarExpedicion', '').upper()"/>
                         <span>THIS IS A PRINTED REPRESENTATION OF A CFDI</span>
                     </div>
@@ -160,11 +160,10 @@
 
                 <div id='complement'>
                     <div class='row'>
-                        <t t-set="tfd" t-value="o.env['account.move'].l10n_mx_edi_get_tfd_etree(cfdi)"/>
                         <div class="col-3" style="float:left; padding-top: 0.3em; padding-bottom: 0.3em;">
                             <img t-att-src="'/report/barcode/QR/%s&amp;width=180&amp;height=180' % quote_plus('?') + keep_query(
                                 re= cfdi.Emisor.get('Rfc', ''), rr= cfdi.Receptor.get('Rfc', ''),
-                                tt=float(cfdi.get('Total', '').encode('ascii', 'replace')), id=tfd.get('UUID', ''))" style="height: 180px;width: 180px;"/>
+                                tt=float(cfdi.get('Total', '').encode('ascii', 'replace')), id=uuid)" style="height: 180px;width: 180px;"/>
                         </div>
                         <div class="col-9" style="font-size:8px">
 
@@ -178,14 +177,13 @@
                                 <strong><span>Digital stamp SAT</span></strong>
                             </div>
                             <div style="padding-top: 0.3em; padding-bottom: 0.3em; width: 93%;">
-                                <span t-esc="tfd.get('SelloSAT', '')"/>
+                                <span t-esc="sello_sat"/>
                             </div>
                             <div class="text-center" style="padding-top: 0.3em; padding-bottom: 0.3em;background-color: #848484;color: #ffffff;">
                                 <strong><span>Original chain complement of digital certification SAT</span></strong>
                             </div>
                             <div style="padding-top: 0.3em; padding-bottom: 0.3em; width: 93%;">
-                            <!-- TODO: change path by 'l10n_mx_edi/data/xslt/3.3/cadenaoriginal_TFD_1_1.xslt'. Wait for this PR https://github.com/Vauxoo/enterprise/pull/262/files -->
-                                <span t-esc="o.env['account.move'].l10n_mx_edi_generate_cadena('l10n_mx_edi/data/3.3/cadenaoriginal.xslt', cfdi)"/>
+                                <span t-esc="cadena"/>
                             </div>
                             <div class="text-center" style="padding-top: 0.3em; padding-bottom: 0.3em;background-color: #848484;color: #ffffff;">
                                 <strong><span>Extra Info</span></strong>
@@ -196,8 +194,8 @@
                                     <span> | Expedition place:</span> <span t-esc="cfdi.get('LugarExpedicion')"/>
                                     <span> | Fiscal Regime:</span> <span t-esc="cfdi.Emisor.get('RegimenFiscal', '')"/>
                                     <span> | Emission Date:</span> <span t-esc="cfdi.get('Fecha', '').replace('T', ' ')"/>
-                                    <span> | Certification Date:</span> <span t-esc="tfd.get('FechaTimbrado', '').replace('T', ' ')"/>
-                                    <span> | Fiscal Folio:</span> <span t-esc="tfd.get('UUID')"/>
+                                    <span> | Certification Date:</span> <span t-esc="stamp_date"/>
+                                    <span> | Fiscal Folio:</span> <span t-esc="uuid"/>
                                 </div>
                             </div>
                         </div>
@@ -221,15 +219,14 @@
     </template>
 
     <!-- QWeb Reports -->
-    <report
-        id="l10n_mx_edi_report_session"
-        model="pos.session"
-        string="XML Session"
-        report_type="qweb-pdf"
-        multi="False"
-        menu="False"
-        name="l10n_mx_edi_pos.report_xml_session"
-        file="l10n_mx_edi_pos.report_xml_session"
-        attachment_use="False"
-        />
+    <record id="l10n_mx_edi_report_session" model="ir.actions.report">
+        <field name="name">XML Session</field>
+        <field name="model">pos.session</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">l10n_mx_edi_pos.report_xml_session</field>
+        <field name="report_file">l10n_mx_edi_pos.report_xml_session</field>
+        <field name="print_report_name">'CFDI'</field>
+        <field name="binding_model_id" ref="model_pos_session"/>
+        <field name="binding_type">report</field>
+    </record>
 </odoo>

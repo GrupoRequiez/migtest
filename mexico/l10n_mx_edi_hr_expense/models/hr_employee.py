@@ -28,13 +28,13 @@ class HrEmployee(models.Model):
              "after the manager actually approve it.")
     l10n_mx_edi_debit_account_id = fields.Many2one(
         'account.account', 'Debtor Number',
-        related='journal_id.default_debit_account_id',
+        related='journal_id.default_account_id',
         domain=[('deprecated', '=', False)],
         help="Account defined in the journal to use when the employee receive "
         "money for expenses.")
     l10n_mx_edi_credit_account_id = fields.Many2one(
         'account.account', 'Creditor Number',
-        related='journal_id.default_credit_account_id',
+        related='journal_id.default_account_id',
         domain=[('deprecated', '=', False)],
         help="Account defined in the journal to use when the employee paid "
         "an invoice from an expense.")

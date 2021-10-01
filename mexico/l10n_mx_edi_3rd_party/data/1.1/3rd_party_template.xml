@@ -11,17 +11,17 @@
                 <terceros:PorCuentadeTerceros
                     xmlns:terceros="http://www.sat.gob.mx/terceros"
                     version="1.1"
-                    t-att-rfc="third.l10n_mx_edi_get_customer_rfc()"
-                    t-att-nombre="record._get_string_cfdi(third.name, 254)">
+                    t-att-rfc="third.vat.strip()"
+                    t-att-nombre="(third.name)[:254]">
                     <!-- This node is included only if all required fields are set -->
                     <t t-if="all(third.read(['street_name', 'city_id', 'state_id', 'country_id', 'zip'])[0].values())">
                         <terceros:InformacionFiscalTercero
-                            t-att-calle="record._get_string_cfdi(third.street_name)"
-                            t-att-noExterior="record._get_string_cfdi(third.street_number)"
-                            t-att-noInterior="record._get_string_cfdi(third.street_number2)"
+                            t-att-calle="third.street_name"
+                            t-att-noExterior="third.street_number"
+                            t-att-noInterior="third.street_number2"
                             t-att-colonia="third.l10n_mx_edi_colony"
                             t-att-localidad="third.l10n_mx_edi_locality_id.code"
-                            t-att-referencia="record._get_string_cfdi(third.street2)"
+                            t-att-referencia="third.street2"
                             t-att-municipio="third.city_id.l10n_mx_edi_code"
                             t-att-estado="third.state_id.code"
                             t-att-pais="third.country_id.l10n_mx_edi_code"
@@ -44,9 +44,9 @@
                                 t-value="'%s %s' % (part_description, part.description_sale)"/>
                             <terceros:Parte
                                 t-att-cantidad="part_line.product_qty"
-                                t-att-unidad="record._get_string_cfdi(part_line.product_uom_id.name, 20)"
-                                t-att-noIdentificacion="record._get_string_cfdi(part.default_code)"
-                                t-att-descripcion="record._get_string_cfdi(part_description, 1000)"
+                                t-att-unidad="(part_line.product_uom_id.name)[:20]"
+                                t-att-noIdentificacion="part.default_code"
+                                t-att-descripcion="(part_description)[:1000]"
                                 t-att-valorUnitario="'%.*f' % (decimal_precision, part.lst_price)"
                                 t-att-importe="'%.*f' % (decimal_precision, part_line.product_qty*part.lst_price)">
                                 <!-- If the part is imported and sold first hand -->
@@ -87,7 +87,7 @@
                                     <terceros:Traslado
                                         t-att-impuesto="tax_name(tax.mapped('invoice_repartition_line_ids.tag_ids')[0].name if tax.mapped('invoice_repartition_line_ids.tag_ids') else '')"
                                         t-att-tasa="'%.6f' % abs(tax.amount / 100.0)"
-                                        t-att-importe="'%.2f' % abs(tax.amount / 100.0 * line.price_subtotal) if tax.l10n_mx_cfdi_tax_type != 'Exento' else False"/>
+                                        t-att-importe="'%.2f' % abs(tax.amount / 100.0 * line.price_subtotal) if tax.l10n_mx_tax_type != 'Exento' else False"/>
                                 </t>
                             </terceros:Traslados>
                         </t>

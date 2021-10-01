@@ -11,7 +11,7 @@ class AccountBankStatementLine(models.Model):
             l10n_mx_edi_manual_reconciliation=False)).process_reconciliation(
                 counterpart_aml_dicts=counterpart_aml_dicts,
                 payment_aml_rec=payment_aml_rec, new_aml_dicts=new_aml_dicts)
-        if not self.l10n_mx_edi_is_required():
+        if self.l10n_mx_edi_cfdi_request not in ('on_invoice', 'on_refund'):
             return res
         for payment in res.mapped('line_ids.payment_id'):
             is_required = payment.l10n_mx_edi_advance_is_required(

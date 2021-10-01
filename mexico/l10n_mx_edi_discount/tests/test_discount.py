@@ -11,7 +11,7 @@ class TestDiscount(TransactionCase):
         super(TestDiscount, self).setUp()
         self.invoice_model = self.env['account.move']
         self.invoice_line_model = self.env['account.move.line']
-        self.partner_agrolait = self.env.ref("base.res_partner_address_4")
+        self.partner_a = self.env.ref("base.res_partner_address_4")
         self.mxn = self.env.ref('base.MXN')
         self.product = self.env.ref("product.product_product_3")
 
@@ -30,14 +30,15 @@ class TestDiscount(TransactionCase):
 
         invoice = self.invoice_model.new({
             'name': 'INV/0003',
-            'partner_id': self.partner_agrolait.id,
-            'type': 'out_invoice',
+            'partner_id': self.partner_a.id,
+            'move_type': 'out_invoice',
             'currency_id': self.mxn.id,
         })
 
         user_type = self.env.ref('account.data_account_type_revenue')
         account = self.env['account.account'].search(
-            [('user_type_id', '=', user_type.id)], limit=1)
+            [('user_type_id', '=', user_type.id),
+             ('company_id', '=', invoice.company_id.id)], limit=1)
 
         invoice.invoice_line_ids = ([(0, 0, {
             'name': 'Product 001',
@@ -66,13 +67,14 @@ class TestDiscount(TransactionCase):
         discount_digits = dp.precision_get('Discount')
         invoice = self.invoice_model.create({
             'name': 'INV/0009',
-            'partner_id': self.partner_agrolait.id,
-            'type': 'out_invoice',
+            'partner_id': self.partner_a.id,
+            'move_type': 'out_invoice',
             'currency_id': self.mxn.id,
         })
         user_type = self.env.ref('account.data_account_type_revenue')
         account = self.env['account.account'].search(
-            [('user_type_id', '=', user_type.id)], limit=1)
+            [('user_type_id', '=', user_type.id),
+             ('company_id', '=', invoice.company_id.id)], limit=1)
         invoice.invoice_line_ids = ([(0, 0, {
             'name': 'CFPE1IWY',
             'product_id': self.product.id,

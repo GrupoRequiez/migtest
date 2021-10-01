@@ -1,10 +1,16 @@
 Customs DIOT
 ============
 
-TODO
+This module allows generate the entries required to get the DIOT report for
+customs payments.
 
-In some cases there may be a difference between the amount of the customs and
-the amount of the bill of customs.
+To get this, is necessary create a new record with the same data that in
+the custom, and relate all the invoices that was importad with it.
+
+Notes:
+
+*In some cases there may be a difference between the amount of the customs and
+the amount of the bill of customs.*
 
 When this happens, an auxiliary line is created on the invoice with the
 difference amount.
@@ -17,6 +23,17 @@ The parameter must have the key ``customs_difference_account`` and the value
 must be the id of the accounting account.
 
 If this parameter does not exist, the invoice journal account will be use.
+
+*Line apportionment*
+
+When is add a custom for importation, are added all the invoices that was
+imported with that document. And could be different vendors, then, could be
+reported in the DIOT the taxes amount between all the vendors or could be used
+a global vendor. By default is used the global vendor, but could be add a
+system parameter with the key ``customs_line_apportionment`` and the amounts
+for Freight, Other increments, IGI, DTA and CC could be join in a line by
+each vendor in the customs.
+
 
 Installation
 ============

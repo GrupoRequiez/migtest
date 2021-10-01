@@ -52,6 +52,7 @@ class AccountMove(models.Model):
                 'price_unit': price if price > 0 else -price,
                 'price_total': price if price > 0 else -price,
                 'price_subtotal': price if price > 0 else -price,
+                'tax_exigible': False if price > 0 else True,
             }
             aml_obj.new(move_line_dict)
 
@@ -63,6 +64,7 @@ class AccountMove(models.Model):
                 price_unit=price if price < 0 else -price,
                 price_total=price if price < 0 else -price,
                 price_subtotal=price if price < 0 else -price,
+                tax_exigible=False if price < 0 else True,
             )
             lines_2_create.append(ml_dict)
 
@@ -76,6 +78,6 @@ class AccountMoveLine(models.Model):
 
     l10n_mx_edi_invoice_broker_id = fields.Many2one(
         'account.move', string='Overseas Invoice',
-        domain="[('type', '=', 'in_invoice'), ('state', '=', 'posted')]",
+        domain="[('move_type', '=', 'in_invoice'), ('state', '=', 'posted')]",
         help='This is the source invoice upon taxes are included in this line '
         'and that were paid by the broker on behalf of the company')

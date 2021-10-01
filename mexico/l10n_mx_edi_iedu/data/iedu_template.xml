@@ -15,7 +15,7 @@
                         t-att-CURP="line.l10n_mx_edi_iedu_id.l10n_mx_edi_curp"
                         t-att-nivelEducativo="iedu_level[0] if iedu_level else False"
                         t-att-autRVOE="record.journal_id.l10n_mx_edi_iedu_code_ids.filtered(lambda iedu: iedu.l10n_mx_edi_iedu_education_level_id.name == iedu_level[0] if iedu_level else '').l10n_mx_edi_iedu_code"
-                        t-att-rfcPago="customer.l10n_mx_edi_get_customer_rfc() if line.l10n_mx_edi_iedu_id.vat != record.partner_id.vat else False" />
+                        t-att-rfcPago="customer_rfc if line.l10n_mx_edi_iedu_id.vat != record.partner_id.vat else False" />
                 </cfdi:ComplementoConcepto>
             </t>
         </xpath>

@@ -17,29 +17,27 @@ you can:
 Configure
 =========
 
-- Create two accounts for advance operations. These accounts must be configured in the product *'Application of advance'* in this way:
+- Create the account for advance operations. That account must be configured in the product *'Application of advance'* in this way:
 
   .. image:: l10n_mx_edi_advance/static/src/img/product_accounting.png
     :width: 400pt
     :alt: product accounting
 
-  * The Income Account: Must be a sub-account of *'899.01 Otras cuentas de orden'* (899.01.XX).
+  * The Income Account: Must be a Current Liabilities account, sub-account of *'206 Anticipo de cliente'* (206.XX.XX).
 
     .. image:: l10n_mx_edi_advance/static/src/img/income_account.png
       :width: 400pt
       :alt: Income Account
 
-  * The Expense Account: Must be a receivable account, sub-account of *'206.01 Anticipo de cliente nacional'* (206.01.XX)
+- In accounting settings assign the process that will be used to apply the
+  advances on the invoices.
 
-    .. image:: l10n_mx_edi_advance/static/src/img/expense_account.png
-      :width: 400pt
-      :alt: Expense Account
+  Note: If is used the process B is necessary is a python tax with the next
+  code on the invoice by the amount total:
+  ``result = base_amount * 0.16``
 
 - In accounting settings assign the product *'Application of advance'* that
   will be used to indicate that an document is an advance.
-
-- In accounting settings assign the journal *'Advance Operations'* that will
-  be used in the advance invoice that will be created automatically.
 
   .. image:: l10n_mx_edi_advance/static/src/img/accounting_settings.png
     :width: 500pt
@@ -130,6 +128,7 @@ Credits
 
 * Nhomar Hernandez <nhomar@vauxoo.com> (Designer)
 * Gabriela Mogollón <gmogollon@vauxoo.com> (Developer)
+* Luis Torres <luis_t@vauxoo.com> (Developer)
 
 Maintainer
 ==========

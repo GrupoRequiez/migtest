@@ -10,11 +10,14 @@
         <field name="rule_type">writeoff_suggestion</field>
         <field name="auto_reconcile" eval="False"/>
         <field name="match_nature">both</field>
+        <field name="match_partner" eval="True"/>
+    </record>
+    <record id="reconciliation_model_default_rule_line" model="account.reconcile.model.line">
         <field name="amount_type">percentage</field>
         <field name="label">Advance</field>
         <field name="match_total_amount_param" eval="100"/>
-        <field name="match_partner" eval="True"/>
-        <field name="account_id" search="[('code', '=', '206.01.01')]"/>
+        <field name="account_id" search="[('code', '=', '206.01.01'), ('company_id', '=', 1)]" model="account.account"/>
+        <field name="model_id" eval="reconciliation_model_default_rule"/>
     </record>
 
 </odoo>

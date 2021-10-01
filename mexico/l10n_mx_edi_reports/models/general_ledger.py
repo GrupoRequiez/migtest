@@ -62,7 +62,7 @@ class MxReportJournalEntries(models.AbstractModel):
             journals[journal] = {}
             domain = [
                 ('date', '<=', context['date_to']),
-                ('company_id', 'in', context['company_ids']),
+                ('company_id', '=', context.get('company_id') or self.env.user.company_id.id),
                 ('journal_id', '=', journal.id)]
             if context['date_from_aml']:
                 domain.append(('date', '>=', context['date_from_aml']))
@@ -175,14 +175,8 @@ class MxReportJournalEntries(models.AbstractModel):
 
     def _get_lines_third_level(self, move):
         lines = []
-        basis_account_ids = self.env['account.tax'].search_read(
-            [('cash_basis_base_account_id', '!=', False)],
-            ['cash_basis_base_account_id'])
-        basis_account_ids = list(set([account[
-            'cash_basis_base_account_id'][0] for account in basis_account_ids]
-        ))
-        for line in move.line_ids.filtered(
-                lambda l: l.account_id.id not in basis_account_ids):
+        basis_account_id = move.company_id.account_cash_basis_base_account_id
+        for line in move.line_ids.filtered(lambda l: l.account_id != basis_account_id):
             name = line.name or line.move_id.name
             name = name[:43] + "..." if len(name) > 45 else name
             lines.append({
@@ -203,10 +197,10 @@ class MxReportJournalEntries(models.AbstractModel):
 
     def _get_caret_type(self, line):
         caret_type = 'account.move'
-        if 'invoice' in line.move_id.type:
-            caret_type = 'account.move.in' if line.move_id.type in (
+        if 'invoice' in line.move_id.move_type:
+            caret_type = 'account.move.in' if line.move_id.move_type in (
                 'in_refund', 'in_invoice') else 'account.move.out'
-        elif 'receipt' in line.move_id.type:
+        elif 'receipt' in line.move_id.move_type:
             caret_type = 'account.payment'
         return caret_type
 
@@ -228,25 +222,20 @@ class MxReportJournalEntries(models.AbstractModel):
     def get_bce_dict(self, options):
         company = self.env.user.company_id
         xml_data = self._get_lines(options)
-        lines = [int(l['id'][5:]) for l in xml_data if l['level'] == 2]
+        lines = [int(line['id'][5:]) for line in xml_data if line['level'] == 2]
         moves = self.env['account.move'].browse(lines)
         date = fields.datetime.strptime(
             self.env.context['date_from'], DEFAULT_SERVER_DATE_FORMAT)
-        basis_account_ids = self.env['account.tax'].search_read(
-            [('cash_basis_base_account_id', '!=', False)],
-            ['cash_basis_base_account_id'])
-        basis_account_ids = list(set([account[
-            'cash_basis_base_account_id'][0] for account in basis_account_ids]
-        ))
+        basis_account_ids = moves.mapped('company_id.account_cash_basis_base_account_id')
         moves_to_exclude = [
             value.move_id.id for value in moves.mapped('line_ids').filtered(
-                lambda m: m.account_id.id in basis_account_ids)]
+                lambda m: m.account_id in basis_account_ids)]
         chart = {
             'month': str(date.month).zfill(2),
             'year': date.year,
             'moves': moves.filtered(lambda l: l.id not in moves_to_exclude),
             'company': company,
-            'basis_account_ids': basis_account_ids,
+            'basis_account_ids': basis_account_ids.ids,
         }
         return chart
 
@@ -264,7 +253,7 @@ class MxReportJournalEntries(models.AbstractModel):
             'order_number': options.get('order_number') or False,
             'process_number': options.get('process_number') or False,
         })
-        cfdimoves = qweb.render(CFDIPLZ_TEMPLATE, values=values)
+        cfdimoves = qweb._render(CFDIPLZ_TEMPLATE, values=values)
         for key, value in MX_NS_REFACTORING.items():
             cfdimoves = cfdimoves.replace(key.encode('UTF-8'),
                                           value.encode('UTF-8') + b':')

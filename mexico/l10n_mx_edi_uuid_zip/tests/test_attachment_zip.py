@@ -15,12 +15,14 @@ class TestAttachmentZip(TransactionCase):
         super(TestAttachmentZip, self).setUp()
         self.attach = self.env['ir.attachment']
         xml_expected_str = tools.file_open(os.path.join(
-            'l10n_mx_edi', 'tests', 'expected_cfdi33.xml')
+            'l10n_mx_edi_uuid', 'tests', 'expected_cfdi33.xml')
         ).read().encode('UTF-8')
         self.xml_expected = objectify.fromstring(xml_expected_str)
 
     def create_attachment(self, model, uuid=None):
-        tfd = model.l10n_mx_edi_get_tfd_etree(self.xml_expected)
+        attribute = 'tfd:TimbreFiscalDigital[1]'
+        namespace = {'tfd': 'http://www.sat.gob.mx/TimbreFiscalDigital'}
+        tfd = self.xml_expected.Complemento.xpath(attribute, namespaces=namespace)[0]
         tfd.attrib['UUID'] = uuid or ''
         if uuid is None:
             del tfd.attrib['UUID']
@@ -34,7 +36,7 @@ class TestAttachmentZip(TransactionCase):
         return attachment
 
     def create_invoice(self, cfdi_name='test01.xml'):
-        inv = self.env['account.move'].create({'type': 'out_invoice'})
+        inv = self.env['account.move'].create({'move_type': 'out_invoice'})
         inv.l10n_mx_edi_cfdi_name = cfdi_name
         return inv
 

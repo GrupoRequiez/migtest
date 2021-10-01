@@ -9,7 +9,7 @@
         <field name="uom_id" ref="uom.product_uom_litre"/>
         <field name="uom_po_id" ref="uom.product_uom_litre"/>
         <field name="l10n_mx_edi_fuel_billing">True</field>
-        <field name="l10n_mx_edi_code_sat_id" ref="l10n_mx_edi.prod_code_sat_15101505"/>
+        <field name="unspsc_code_id" ref="product_unspsc.unspsc_code_15101505"/>
     </record>
     <record id="res_product_fuel_magna" model="product.product">
         <field name="name">Magna Fuel</field>
@@ -20,7 +20,7 @@
         <field name="uom_id" ref="uom.product_uom_litre"/>
         <field name="uom_po_id" ref="uom.product_uom_litre"/>
         <field name="l10n_mx_edi_fuel_billing">True</field>
-        <field name="l10n_mx_edi_code_sat_id" ref="l10n_mx_edi.prod_code_sat_15101506"/>
+        <field name="unspsc_code_id" ref="product_unspsc.unspsc_code_15101506"/>
     </record>
     <record id="res_product_fuel_premium" model="product.product">
         <field name="name">Premium Fuel</field>
@@ -31,6 +31,6 @@
         <field name="uom_id" ref="uom.product_uom_litre"/>
         <field name="uom_po_id" ref="uom.product_uom_litre"/>
         <field name="l10n_mx_edi_fuel_billing">True</field>
-        <field name="l10n_mx_edi_code_sat_id" ref="l10n_mx_edi.prod_code_sat_15101506"/>
+        <field name="unspsc_code_id" ref="product_unspsc.unspsc_code_15101506"/>
     </record>
 </odoo>

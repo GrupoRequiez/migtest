@@ -6,7 +6,7 @@
         Allows to properly link the Foreign Partner to the Import Taxes paid by
     a broker on behalf of my company
     """,
-    "version": "13.0.1.0.0",
+    "version": "14.0.1.0.0",
     "author": "Vauxoo",
     "category": "Accounting",
     "website": "http://www.vauxoo.com",

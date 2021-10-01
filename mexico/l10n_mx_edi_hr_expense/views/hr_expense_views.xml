@@ -28,8 +28,8 @@
             <xpath expr="//field[@name='state']" position="before">
                 <field name="l10n_mx_edi_sat_status"/>
                 <field name="l10n_mx_edi_functional"/>
-                <field name="l10n_mx_edi_functionally_approved"/>
-                <field name="l10n_mx_edi_fiscally_approved"/>
+                <field name="l10n_mx_edi_functionally_approved" force_save="1"/>
+                <field name="l10n_mx_edi_fiscally_approved" force_save="1"/>
             </xpath>
         </field>
     </record>
@@ -72,7 +72,7 @@
                 <field name="account_id"/>
                 <field name="state"/>
                 <field name="l10n_mx_edi_sat_status" invisible="1"/>
-                <field name="l10n_mx_edi_forced_approved" string="Forced"/>
+                <field name="l10n_mx_edi_forced_approved" string="Forced" force_save="1"/>
                 <field name="l10n_mx_edi_functionally_approved" string="Functionally"/>
                 <field name="l10n_mx_edi_fiscally_approved" string="Fiscally"/>
                 <button name="l10n_mx_edi_reclassify_journal_entries" type="object" icon="fa-refresh" groups="l10n_mx_edi_hr_expense.reclassify_journal_entries_expense"/>
@@ -342,8 +342,8 @@
                                     <field name="l10n_mx_edi_received_rfc"/>
                                     <field name="l10n_mx_edi_date"/>
                                     <field name="l10n_mx_edi_invoice_id"/>
-                                    <field name="l10n_mx_edi_move_id"/>
-                                    <field name="l10n_mx_edi_move_line_id"/>
+                                    <field name="l10n_mx_edi_move_id" force_save="1"/>
+                                    <field name="l10n_mx_edi_move_line_id" force_save="1"/>
                                 </group>
                             </page>
                         </notebook>

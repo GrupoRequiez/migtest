@@ -124,8 +124,7 @@ class WebsiteCFDI(Controller):
                  ('res_id', '=', inv.id),
                  ('name', '=', fname),
                  ], limit=1)
-            if (inv and inv.l10n_mx_edi_pac_status == 'signed' and
-                    not inv_attachment and ftype == 'pdf'):
+            if (inv and inv.edi_state == 'sent' and not inv_attachment and ftype == 'pdf'):
                 report_info = inv.invoice_print()
                 report = env['ir.actions.report']._get_report_from_name(
                     report_info['report_name'])

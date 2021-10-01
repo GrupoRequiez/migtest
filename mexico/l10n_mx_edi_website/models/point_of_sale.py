@@ -57,7 +57,7 @@ class PosOrder(models.Model):
             partner
             if (partner.vat and partner.vat != 'XEXX010101000') else False)
         invoice = order.account_move
-        if invoice.l10n_mx_edi_pac_status != 'signed':
+        if invoice.edi_state != 'sent':
             invoice = valid_partner and self.invoice_sale(ticket_number)
         values = {
             'ticket_number': ticket_number,
@@ -122,15 +122,13 @@ class PosOrder(models.Model):
                 'you. Please check it and try again')
             return values
 
-        elif partner and order.partner_id and (order.partner_id != partner):
+        if partner and order.partner_id and (order.partner_id != partner):
             order.partner_id.write({'parent_id': partner.id,
                                     'email': email})
             values['invoice'] = (
-                order.account_move
-                if order.account_move.l10n_mx_edi_pac_status == 'signed' else
-                self.invoice_sale(ticket_number))
+                order.account_move if order.account_move.edi_state == 'sent' else self.invoice_sale(ticket_number))
             return values
-        elif partner:
+        if partner:
             contact = partner_obj
             if ((partner.email or '').lower() != (email or '').lower() and not
                     partner_obj.search_count(
@@ -151,11 +149,9 @@ class PosOrder(models.Model):
                     'partner_id': contact.id or partner.id,
                 })
             values['invoice'] = (
-                order.account_move
-                if order.account_move.l10n_mx_edi_pac_status == 'signed' else
-                self.invoice_sale(ticket_number))
+                order.account_move if order.account_move.edi_state == 'sent' else self.invoice_sale(ticket_number))
             return values
-        elif vat:
+        if vat:
             new_data = {
                 'country_id': self.env.ref('base.mx').id,
                 'name': order.partner_id.name or email or vat,
@@ -171,9 +167,7 @@ class PosOrder(models.Model):
                 order.partner_id and new_data or
                 {'partner_id': new_partner.id})
             values['invoice'] = (
-                order.account_move
-                if order.account_move.l10n_mx_edi_pac_status == 'signed' else
-                self.invoice_sale(ticket_number))
+                order.account_move if order.account_move.edi_state == 'sent' else self.invoice_sale(ticket_number))
             return values
         values['vat'] = _('Required')
         values['error'] = _('You are not registered, VAT is required')
@@ -260,8 +254,8 @@ class PosOrder(models.Model):
         session = order.session_id
         if invoice.state == 'draft':
             invoice.with_context({'disable_after_commit': True}).action_post()
-        if (invoice and invoice.l10n_mx_edi_is_required()
-                and invoice.l10n_mx_edi_pac_status != 'signed'):
+        if (invoice and invoice.l10n_mx_edi_cfdi_request in (
+                'on_invoice', 'on_refund') and invoice.edi_state != 'sent'):
             invoice._l10n_mx_edi_retry()
         if invoice:
             return invoice

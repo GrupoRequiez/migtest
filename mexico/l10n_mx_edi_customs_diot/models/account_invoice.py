@@ -19,7 +19,7 @@ class AccountMove(models.Model):
         help='On invoices with customs saves the amount total in the company '
         'currency based in the customs rate.')
     l10n_mx_edi_freight = fields.Monetary(
-        'Freight', track_visibility='onchange',
+        'Freight', tracking=True,
         currency_field='currency_id',
         help='Freight cost in the invoice if was imported.')
     l10n_mx_edi_customs_base = fields.Monetary(

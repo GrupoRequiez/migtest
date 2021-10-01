@@ -22,7 +22,6 @@
 </field>
         <field name="report_name">${(object.name or '').replace('/','-')}</field>
         <field name="auto_delete" eval="True"/>
-        <field name="user_signature" eval="False"/>
     </record>
 
     <!--Email templates for expenses -->
@@ -46,7 +45,6 @@
 </field>
         <field name="report_name">${(object.name or '').replace('/','-')}</field>
         <field name="auto_delete" eval="True"/>
-        <field name="user_signature" eval="False"/>
     </record>
     <!--Email templates for expenses -->
     <record id="mail_template_functional" model="mail.template">
@@ -93,7 +91,6 @@
             </div>
             </field>
             <field name="auto_delete" eval="True"/>
-            <field name="user_signature" eval="False"/>
         </record>
     </data>
 </odoo>

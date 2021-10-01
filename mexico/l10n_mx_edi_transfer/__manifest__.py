@@ -1,7 +1,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 {
     'name': 'EDI Transfer',
-    'version': '13.0.1.0.0',
+    'version': '14.0.1.0.0',
     'author': 'Vauxoo',
     'category': 'Hidden',
     'license': 'LGPL-3',

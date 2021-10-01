@@ -3,7 +3,7 @@
 
 {
     "name": "Cash Flow Statement - Indirect Method",
-    "version": "13.0.1.0.0",
+    "version": "14.0.1.0.0",
     "author": "Vauxoo",
     "category": "Localization/Mexico",
     "website": "http://www.vauxoo.com/",

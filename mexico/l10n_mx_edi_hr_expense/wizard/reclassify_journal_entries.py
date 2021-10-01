@@ -24,7 +24,7 @@ class L10nMxEdiReclassifyJournalEntries(models.TransientModel):
         if not active_ids or active_model != 'account.move':
             return res
         if self.env['account.move'].browse(active_ids).mapped(
-                'type')[0] not in ['in_invoice', 'in_refund']:
+                'move_type')[0] not in ['in_invoice', 'in_refund']:
             raise UserError(_(
                 "You can only reclassify journal entries for vendor bills"))
         return res

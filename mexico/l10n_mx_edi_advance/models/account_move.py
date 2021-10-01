@@ -11,15 +11,11 @@ from odoo.exceptions import UserError
 class AccountMove(models.Model):
     _inherit = 'account.move'
 
-    l10n_mx_edi_advance_move_id = fields.Many2one(
-        'account.move', string='Advance document',
-        help="Advance invoice for this magic entry")
-
     @api.depends('l10n_mx_edi_origin', 'amount_total')
     def _compute_amount_advances(self):
-        w_advance = self.filtered(lambda i: i.type == 'out_invoice' and
-                                  i.l10n_mx_edi_origin and
-                                  i.l10n_mx_edi_origin.startswith('07'))
+        w_advance = self.filtered(
+            lambda i: i.company_id.l10n_mx_edi_advance == 'A' and i.move_type == 'out_invoice' and
+            i.l10n_mx_edi_origin and i.l10n_mx_edi_origin.startswith('07'))
         for record in self - w_advance:
             record.l10n_mx_edi_amount_advances = 0.0
             record.l10n_mx_edi_amount_residual_advances = record.amount_total
@@ -50,10 +46,12 @@ class AccountMove(models.Model):
         res = super(
             AccountMove, self)._compute_payments_widget_to_reconcile_info()
         for move in self.filtered(lambda inv: inv.state == 'draft' and
-                                  inv.type == 'out_invoice'):
+                                  inv.move_type == 'out_invoice'):
             domain = move._l10n_mx_edi_get_advance_aml_domain()
+            domain.extend([('move_id.payment_state', 'in', ['paid', 'in_payment', 'partial'])])
             related_advs = move._l10n_mx_edi_get_advance_uuid_related()
             for uuid in related_advs:
+                domain.extend([('move_id.l10n_mx_edi_cfdi_uuid', 'not like', uuid)])
                 domain.extend([('move_id.narration', 'not like', uuid)])
             lines = move.env['account.move.line'].search(domain)
             if not lines:
@@ -72,6 +70,9 @@ class AccountMove(models.Model):
                     amount_to_show = currency._convert(
                         abs(line.amount_residual), currency_id,
                         move.company_id, line.date or fields.Date.today())
+                taxes = line.tax_ids.compute_all(
+                    amount_to_show, line.currency_id or line.company_id.currency_id, 1)['taxes']
+                amount_to_show += sum([tax.get('amount') for tax in taxes])
                 if float_is_zero(
                         amount_to_show,
                         precision_rounding=currency_id.rounding):
@@ -93,16 +94,36 @@ class AccountMove(models.Model):
         """Related an advance to the invoice."""
         res = super(AccountMove, self).js_assign_outstanding_line(line_id)
         credit_aml = self.env['account.move.line'].browse(line_id)
-        advance = credit_aml.move_id.l10n_mx_edi_advance_move_id
+        advance = credit_aml.move_id
         for invoice in self.filtered(lambda r: r.state == 'draft'):
-            invoice.l10n_mx_edi_origin = invoice._set_cfdi_origin(
+            invoice.l10n_mx_edi_origin = invoice._l10n_mx_edi_write_cfdi_origin(
                 '07', [advance.l10n_mx_edi_cfdi_uuid])
+            if invoice.company_id.l10n_mx_edi_advance != 'B':
+                continue
+            if credit_aml.currency_id and credit_aml.currency_id == invoice.currency_id:  # noqa
+                amount = abs(credit_aml.amount_residual_currency)
+            else:
+                currency = credit_aml.company_id.currency_id
+                amount = currency._convert(
+                    abs(credit_aml.amount_residual), invoice.currency_id,
+                    invoice.company_id, credit_aml.date or fields.Date.today())
+            if amount > invoice.amount_untaxed:
+                amount = invoice.amount_untaxed
+            adv_text = ' - CFDI por remanente de un anticipo'
+            invoice_total = invoice.amount_untaxed
+            for line in invoice.invoice_line_ids:
+                total_discount = amount / invoice_total * line.price_subtotal
+                line.write({
+                    'name': '%s%s' % (
+                        line.name.replace(adv_text, ''), adv_text),
+                    'l10n_mx_edi_total_discount': total_discount + line.l10n_mx_edi_total_discount,
+                })
         return res
 
     def _l10n_mx_edi_is_advance(self):
         """Check if an invoice is an advance"""
         self.ensure_one()
-        if self.type != 'out_invoice' or len(self.invoice_line_ids) != 1:
+        if self.move_type != 'out_invoice' or len(self.invoice_line_ids) != 1:
             return False
         advance_product = self.company_id.l10n_mx_edi_product_advance_id
         if self.invoice_line_ids.product_id.id != advance_product.id:
@@ -112,9 +133,12 @@ class AccountMove(models.Model):
     def _l10n_mx_edi_get_advance_uuid_related(self):
         """return the advance's uuid applied"""
         self.ensure_one()
-        related_docs = self.get_cfdi_related()
-        if related_docs.get('type') == '07':
-            return related_docs.get('related', [])
+        if not self.l10n_mx_edi_origin:
+            return []
+        related_docs = self._l10n_mx_edi_read_cfdi_origin(
+            self.l10n_mx_edi_origin)
+        if related_docs[0] == '07':
+            return related_docs[1]
         return []
 
     def _l10n_mx_edi_get_advance_aml_domain(self):
@@ -123,7 +147,7 @@ class AccountMove(models.Model):
         adv_prod = self.company_id.l10n_mx_edi_product_advance_id
         financial_partner = self.partner_id._find_accounting_partner(
             self.partner_id)
-        domain = [('account_id', '=', adv_prod.property_account_expense_id.id),
+        domain = [('account_id', '=', adv_prod.property_account_income_id.id),
                   ('partner_id', '=', financial_partner.id),
                   ('reconciled', '=', False),
                   '|', ('amount_residual', '!=', 0.0),
@@ -152,18 +176,23 @@ class AccountMove(models.Model):
             self._onchange_invoice_line_ids()
         return res
 
-    def post(self):
+    def action_post(self):
         """Create the credit note for advances and reconcile it with
         the invoice (only when this one has advances and it's signed).
         """
-        with_advance = self.filtered(lambda r: r.type == 'out_invoice' and
-                                     r._l10n_mx_edi_get_advance_uuid_related())
+        with_advance = self.filtered(
+            lambda r: r.move_type == 'out_invoice' and
+            r.company_id.l10n_mx_edi_advance == 'A'
+            and r._l10n_mx_edi_get_advance_uuid_related())
+        advance_b = self.filtered(
+            lambda r: r.move_type == 'out_invoice' and
+            r.company_id.l10n_mx_edi_advance == 'B' and
+            r._l10n_mx_edi_get_advance_uuid_related())
         if not with_advance:
-            return super(AccountMove, self).post()
-        res = super(AccountMove, self.with_context(
-            disable_after_commit=True)).post()
+            return super(AccountMove, self).action_post()
+        res = super().action_post()
         for inv in with_advance:
-            adv_amount, _partial_amount, _lines, _reverse_lines, _partial_line = inv._l10_mx_edi_prepare_advance_refund_fields()  # noqa
+            adv_amount, _partial_amount, lines, _reverse_lines, _partial_line = inv._l10_mx_edi_prepare_advance_refund_fields()  # noqa
             if not adv_amount:
                 inv.message_post(body=_(
                     '<p>The credit note was not created because the advance '
@@ -173,18 +202,57 @@ class AccountMove(models.Model):
                     '<li>Cancel this invoice and remove the related advance.'
                     '</li><li>Create the credit note manually.</li>'))
                 continue
+            inv.edi_document_ids._process_documents_web_services()
             refund = self.env['account.move.reversal'].with_context(
                 active_ids=inv.ids, active_model='account.move').create({
                     'refund_method': 'cancel',
                     'reason': 'Aplicación de anticipos',
                     'date': inv.invoice_date, })
             refund = refund.reverse_moves()
+            inv.reversal_move_id.write({'l10n_mx_edi_origin': '07|%s' % inv.l10n_mx_edi_cfdi_uuid})
+            account = inv.company_id.l10n_mx_edi_product_advance_id.property_account_income_id
+            moves = inv.reversal_move_id.line_ids.filtered(lambda line: line.account_id == account)
+            moves |= lines.filtered(lambda line: line.account_id == account)
+            moves.reconcile()
             reverse_entries = self.search(
                 [('reversed_entry_id', '=', self.id)])
             inv.message_post_with_view(
                 'l10n_mx_edi_advance.l10n_mx_edi_message_advance_refund',
                 values={'self': inv, 'origin': reverse_entries},
                 subtype_id=self.env.ref('mail.mt_note').id)
+        for inv in advance_b:
+            adv_amount, _partial_amount, lines, reverse_lines, _partial_line = inv._l10_mx_edi_prepare_advance_refund_fields()  # noqa
+            aml_obj = inv.move_id.line_ids.with_context(check_move_validity=False, recompute=False)
+            account = inv.company_id.l10n_mx_edi_product_advance_id.categ_id.property_account_income_categ_id or inv.company_id.l10n_mx_edi_product_advance_id.property_account_income_id  # noqa
+            move_line_dict = {
+                'name': _('Advance'),
+                'move_id': inv.move_id,
+                'company_id': inv.company_id,
+                'quantity': 1,
+                'debit': 0,
+                'credit': inv.currency_id._convert(
+                    adv_amount, inv.company_id.currency_id, inv.company_id, inv.date_invoice),
+                'account_id': account.id,
+                'invoice_id': inv,
+                'partner_id': inv.partner_id,
+                'currency_id': inv.currency_id if inv.currency_id != inv.company_id.currency_id else False,
+                'amount_currency': -adv_amount if inv.currency_id != inv.company_id.currency_id else 0,
+            }
+            first_line = aml_obj.new(move_line_dict)
+            first_line = aml_obj._convert_to_write(first_line._cache)
+            aml_obj.create(first_line)
+            move_line_dict.update({
+                'debit': inv.currency_id._convert(
+                    adv_amount, inv.company_id.currency_id, inv.company_id, inv.date_invoice),
+                'credit': 0,
+                'account_id': inv.company_id.l10n_mx_edi_product_advance_id.property_account_income_id,
+                'amount_currency': adv_amount if inv.currency_id != inv.company_id.currency_id else 0,
+            })
+            second_line = aml_obj.new(move_line_dict)
+            second_line = aml_obj._convert_to_write(second_line._cache)
+            second_line = aml_obj.create(second_line)
+            inv.finalize_invoice_move_lines(second_line | reverse_lines)
+            (second_line | reverse_lines).reconcile()
         return res
 
     @api.model
@@ -194,7 +262,7 @@ class AccountMove(models.Model):
             - Payment method
             - Usage: 'G02' - returns, discounts or bonuses.
         """
-        if self.l10n_mx_edi_is_required():
+        if self.l10n_mx_edi_cfdi_request in ('on_invoice', 'on_refund'):
             default_values.update({
                 'l10n_mx_edi_payment_method_id':
                 self.l10n_mx_edi_payment_method_id.id,
@@ -202,7 +270,7 @@ class AccountMove(models.Model):
             })
         values = super(AccountMove, self)._reverse_move_vals(
             default_values, cancel)
-        adv_amount, partial_amount, lines, reverse_lines, partial_line = self._l10_mx_edi_prepare_advance_refund_fields()  # noqa
+        adv_amount, _partial_amount, lines, _reverse_lines, _partial_line = self._l10_mx_edi_prepare_advance_refund_fields()  # noqa
         reverse_entries = self.search([('reversed_entry_id', '=', self.id)])
         if (reverse_entries or not adv_amount or
                 not self._l10n_mx_edi_get_advance_uuid_related()):
@@ -211,26 +279,25 @@ class AccountMove(models.Model):
         if not self.l10n_mx_edi_cfdi_uuid:
             raise UserError(_('The invoice is not signed, and the UUID is '
                               'required to relate the documents.'))
-        values['l10n_mx_edi_origin'] = '%s|%s' % (
-            '07', self.l10n_mx_edi_cfdi_uuid)
         values['l10n_mx_edi_payment_method_id'] = self.env.ref(
             'l10n_mx_edi.payment_method_anticipos').id
-        advances = lines.mapped('move_id.l10n_mx_edi_advance_move_id')
+        advances = lines.mapped('move_id')
         if not advances:
             return values
-        # merge advance lines (when the inv has multi-advance)
-        line_values = []
-        for advance in advances:
-            adv_lines = advance._reverse_move_vals(
-                default_values=default_values)
-            line_values.extend(adv_lines.get('line_ids'))
-        values['line_ids'] = line_values
-        move_ids = reverse_lines.mapped('move_id')
-        for move in move_ids:
-            move._reverse_moves(cancel=True)
-        if partial_amount and partial_line:
-            partial_line._create_advance_magic_entry(
-                partial_amount, self.currency_id)
+        adv_prod = self.company_id.l10n_mx_edi_product_advance_id
+        taxes = adv_prod.taxes_id
+        percentage = sum(tax.amount for tax in taxes if not tax.price_include)
+        price_unit = adv_amount * 100 / (100 + percentage)
+        invoice_line_ids = [(0, 0, {
+            'name': 'Aplicación de anticipo',
+            'price_unit': price_unit,
+            'account_id': adv_prod.property_account_income_id.id,
+            'product_id': adv_prod.id,
+            'product_uom_id': adv_prod.uom_id.id,
+            'tax_ids': [(6, 0, taxes.ids)],
+        })]
+        values.pop('line_ids')
+        values['invoice_line_ids'] = invoice_line_ids
         return values
 
     @api.returns('self')
@@ -239,15 +306,16 @@ class AccountMove(models.Model):
         company = self.env.context.get('company_id') or self.env.company.id
         company = self.env['res.company'].browse(company)
         product = company.l10n_mx_edi_product_advance_id
+        journal = self._search_default_journal(['sale'])
         prod_accounts = product.product_tmpl_id.get_product_accounts()
         advance = self.new({
             'partner_id': partner.id,
             'currency_id': currency.id,
-            'type': 'out_invoice',
+            'move_type': 'out_invoice',
             'invoice_payment_term_id': self.env.ref(
                 'account.account_payment_term_immediate').id,
             'l10n_mx_edi_origin': False,
-            'journal_id': company.l10n_mx_edi_journal_advance_id.id,
+            'journal_id': journal.id,
             'invoice_line_ids': [(0, 0, {
                 'product_id': product.id,
                 'name': 'Anticipo del bien o servicio',
@@ -263,7 +331,6 @@ class AccountMove(models.Model):
         percentage = sum(tax.amount for tax in taxes if not tax.price_include)
         price_unit = amount * 100 / (100 + percentage)
         advance.invoice_line_ids.price_unit = price_unit
-        advance.invoice_line_ids.price_tax = amount - price_unit
         advance = self._convert_to_write(advance._cache)
         advance = self.create(advance)
         return advance
@@ -273,8 +340,7 @@ class AccountMove(models.Model):
         credit note for the advances
         """
         self.ensure_one()
-        adv_amount = 0.0
-        partial_amount = 0.0
+        adv_amount = partial_amount = 0.0
         reverse_lines = self.env['account.move.line']
         partial_line = reverse_lines
         domain = self._l10n_mx_edi_get_advance_aml_domain()
@@ -282,7 +348,7 @@ class AccountMove(models.Model):
         for uuid in related_advs:
             if uuid != related_advs[-1]:
                 domain.extend('|')
-            domain.extend([('move_id.narration', 'like', uuid)])
+            domain.extend([('move_id.l10n_mx_edi_cfdi_uuid', 'like', uuid)])
         lines = self.env['account.move.line'].search(domain)
         if not lines:
             return adv_amount, partial_amount, lines, reverse_lines, partial_line  # noqa
@@ -301,100 +367,23 @@ class AccountMove(models.Model):
                         amount, precision_rounding=self.currency_id.rounding):
                     continue
             adv_amount += amount
+            if self.company_id.l10n_mx_edi_advance != 'B':
+                taxes = line.tax_ids.compute_all(
+                    amount, line.currency_id or line.company_id.currency_id, 1)['taxes']
+                adv_amount += sum([tax.get('amount') for tax in taxes])
+            adv_discount = 0
+            if self.company_id.l10n_mx_edi_advance == 'B':
+                adv_discount = self.l10n_mx_edi_total_discount
             reverse_lines |= line
-            if adv_amount > self.amount_total:
-                partial_amount = adv_amount - self.amount_total
-                adv_amount = self.amount_total
+            if adv_amount > self.amount_total + adv_discount:
+                partial_amount = adv_amount - self.amount_total + adv_discount
+                adv_amount = self.amount_total + adv_discount
                 partial_line = line
         return adv_amount, partial_amount, lines, reverse_lines, partial_line
 
 
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
-
-    def reconcile(self, writeoff_acc_id=False, writeoff_journal_id=False):
-        """Create a new journal entry if one invoice is an advance"""
-        res = super(AccountMoveLine, self).reconcile(
-            writeoff_acc_id, writeoff_journal_id)
-        if not self.mapped('payment_id'):
-            return res
-        # create a magic entry to allow handle advances as outstanding payments
-        # only create the entry is the advance is paid.
-        self._create_advance_magic_entry()
-        return res
-
-    def remove_move_reconcile(self):
-        """ Undo a reconciliation """
-        move_obj = self.env['account.move']
-        adv_journal = self.mapped('company_id.l10n_mx_edi_journal_advance_id')
-        for invoice in self.mapped('payment_id.invoice_ids'):
-            moves = move_obj.search([
-                ('ref', '=like', '% '+invoice.name),
-                ('journal_id', '=', adv_journal.id)])
-            moves.button_cancel()
-            moves.unlink()
-        return super(AccountMoveLine, self).remove_move_reconcile()
-
-    def _create_advance_magic_entry(self, amount=False, currency=False):
-        move_obj = self.env['account.move'].with_context(default_type='entry')
-        partner_obj = self.env['res.partner']
-        aml_obj = self.with_context(check_move_validity=False)
-        for adv in self.mapped('move_id').filtered(
-                lambda r: r._l10n_mx_edi_is_advance() and
-                r.invoice_payment_state == 'paid'):
-            adv_journal = adv.company_id.l10n_mx_edi_journal_advance_id
-            adv_product = adv.company_id.l10n_mx_edi_product_advance_id
-            amount_total = amount or adv.amount_total
-            currency_id = currency or adv.currency_id
-            partner = partner_obj._find_accounting_partner(adv.partner_id)
-            # compute amounts
-            amount_currency = False
-            if currency_id != adv.company_id.currency_id:
-                amount_currency = amount_total
-                amount_total = currency_id._convert(
-                    amount_total, adv.company_id.currency_id,
-                    adv.company_id, adv.date)
-            debit = amount_total
-            credit = 0
-            amount_currency = currency_id._convert(
-                amount_total, adv_journal.currency_id, adv.company_id,
-                adv.date) if adv_journal.currency_id else 0
-            magic_move = move_obj.create({
-                'date': adv.date,
-                'journal_id': adv_journal.id,
-                'ref': 'Advance: %s' % (adv.name),
-                'company_id': adv.company_id.id,
-                'l10n_mx_edi_advance_move_id': adv.id,
-                'narration': _(
-                    'This is a Journal Entry to handle advance payments with '
-                    'a receivable account and use the payment widget of '
-                    'outstanding credit.\n'
-                    'This advance is the CFDI: %s, invoice_id: %s.'
-                ) % (adv.l10n_mx_edi_cfdi_uuid, adv.id),
-            })
-            aml_obj.create({
-                'partner_id': partner.id,
-                'move_id': magic_move.id,
-                'debit': debit,
-                'credit': credit,
-                'amount_currency': amount_currency or False,
-                'journal_id': adv_journal.id,
-                'currency_id': adv_journal.currency_id.id,
-                'account_id': adv_product.property_account_income_id.id,
-                'name': 'Anticipo del bien o servicio',
-            })
-            aml_obj.create({
-                'partner_id': partner.id,
-                'move_id': magic_move.id,
-                'debit': credit,
-                'credit': debit,
-                'amount_currency': -amount_currency or False,
-                'journal_id': adv_journal.id,
-                'currency_id': adv_journal.currency_id.id,
-                'account_id': adv_product.property_account_expense_id.id,
-                'name': 'Anticipo del bien o servicio',
-            })
-            magic_move.action_post()
 
     @api.model
     def _compute_amount_fields(self, amount, src_currency, company_currency):

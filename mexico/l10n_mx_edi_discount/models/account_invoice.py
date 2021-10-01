@@ -6,16 +6,15 @@ class AccountMoveLine(models.Model):
 
     _inherit = 'account.move.line'
 
-    l10n_mx_edi_amount_discount = fields.Float(
+    l10n_mx_edi_amount_discount = fields.Monetary(
         "Unit Discount",
         digits='Discount',
-        currency_field='currency_id',
         compute='_compute_l10n_mx_edi_amount_discount',
         inverse='_inverse_discount',
         store=True,
         help="Discount to be applied for each product in the invoice lines ",
     )
-    l10n_mx_edi_total_discount = fields.Float(
+    l10n_mx_edi_total_discount = fields.Monetary(
         "Total Discount",
         digits='Discount',
         currency_field='currency_id',
@@ -87,20 +86,21 @@ class AccountMoveLine(models.Model):
                 precision_digits=discount_digits
             )
             line.l10n_mx_edi_amount_discount = discount
-            line.discount = float_round(discount / line.price_unit * 100,
-                                        precision_digits=discount_digits)
+            discount = float_round(discount / line.price_unit * 100, precision_digits=discount_digits)
+            line.update(line._get_price_total_and_subtotal(discount=discount))
 
     def _inverse_discount(self):
         deci_pre = self.env['decimal.precision']
         digits = deci_pre.precision_get('Discount')
         for line in self.filtered('price_unit'):
-            line.discount = float_round(
+            discount = float_round(
                 (float_round(line.l10n_mx_edi_amount_discount,
                              precision_digits=digits) /
                  float_round(line.price_unit,
                              precision_digits=digits)) * 100.00,
                 precision_digits=digits
             )
+            line.update(line._get_price_total_and_subtotal(discount=discount))
 
 
 class AccountMove(models.Model):
@@ -108,8 +108,8 @@ class AccountMove(models.Model):
     _inherit = 'account.move'
 
     l10n_mx_edi_total_discount = fields.Monetary(
-        "Total Discount", monetary=True,
-        default=0.0, currency_field='currency_id',
+        "Total Discount",
+        default=0.0,
         compute='_compute_discount',
         help="Sum of discounts on the invoice.",
     )

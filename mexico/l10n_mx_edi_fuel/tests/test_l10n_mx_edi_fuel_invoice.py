@@ -2,24 +2,20 @@ import os
 
 from lxml import objectify
 
-from odoo.addons.l10n_mx_edi.tests.common import InvoiceTransactionCase
+from odoo.addons.l10n_mx_edi.tests.common import TestMxEdiCommon
 from odoo.tools import misc
 
 
-class TestL10nMxEdiInvoiceFuel(InvoiceTransactionCase):
+class TestL10nMxEdiInvoiceFuel(TestMxEdiCommon):
 
     def setUp(self):
         super(TestL10nMxEdiInvoiceFuel, self).setUp()
-        self.isr_tag = self.env['account.account.tag'].search(
-            [('name', '=', 'ISR')])
-        self.tax_negative.tag_ids |= self.isr_tag
         self.partner_chinaexport = self.env.ref("base.res_partner_address_11")
-        self.env.ref('l10n_mx.1_tax12').l10n_mx_cfdi_tax_type = 'Tasa'
+        self.env.ref('l10n_mx.1_tax12').l10n_mx_tax_type = 'Tasa'
         self.fuel_product = self.env.ref(
             'l10n_mx_edi_fuel.res_product_fuel_diesel')
         self.fuel_product.write({
-            'l10n_mx_edi_code_sat_id': self.ref(
-                'l10n_mx_edi.prod_code_sat_15101505'),
+            'unspsc_code_id': self.ref('product_unspsc.unspsc_code_15101505'),
             'taxes_id': [(6, 0, [self.ref('l10n_mx.1_tax12')])],
         })
         self.service_station = self.env['res.partner'].create({
@@ -51,11 +47,11 @@ class TestL10nMxEdiInvoiceFuel(InvoiceTransactionCase):
         if currency_id is None:
             currency_id = self.usd.id
         invoice = self.invoice_model.create({
-            'partner_id': self.partner_agrolait.id,
+            'partner_id': self.partner_a.id,
             'type': inv_type,
             'currency_id': currency_id,
-            'l10n_mx_edi_payment_method_id': self.payment_method_cash.id,
-            'l10n_mx_edi_partner_bank_id': self.account_payment.id,
+            'l10n_mx_edi_payment_method_id': self.env.ref('l10n_mx_edi.payment_method_efectivo').id,
+            'partner_bank_id': self.account_payment.id,
             'l10n_mx_edi_usage': 'P01',
         })
         self.create_fuel_invoice_line(invoice, service_station)
@@ -76,12 +72,12 @@ class TestL10nMxEdiInvoiceFuel(InvoiceTransactionCase):
         self.invoice_line_model.create(invoice_line_dict)
 
     def test_l10n_mx_edi_ecc_invoice(self):
-        self.company.write({'l10n_mx_edi_isepi': True, })
+        self.invoice.company_id.write({'l10n_mx_edi_isepi': True, })
         self.partner_chinaexport.parent_id.write(
             {'ref': '0000123',
              'vat': 'XEXX010101000',
              'country_id': self.env.ref('base.mx').id, })
-        self.partner_agrolait.parent_id.write(
+        self.partner_a.parent_id.write(
             {'vat': 'EKU9003173C9',
              'country_id': self.env.ref('base.mx').id})
 
@@ -89,9 +85,9 @@ class TestL10nMxEdiInvoiceFuel(InvoiceTransactionCase):
         invoice.move_name = 'INV/2018/999'
         invoice.partner_id = self.partner_chinaexport.parent_id
         invoice.action_post()
-        invoice.refresh()
-        self.assertEqual(invoice.l10n_mx_edi_pac_status, "signed",
-                         invoice.message_ids.mapped('body'))
+        generated_files = self._process_documents_web_services(invoice, {'cfdi_3_3'})
+        self.assertTrue(generated_files)
+        self.assertEqual(invoice.edi_state, "sent", invoice.message_ids.mapped('body'))
         xml = invoice.l10n_mx_edi_get_xml_etree()
         namespaces = {
             'ecc12': 'http://www.sat.gob.mx/EstadoDeCuentaCombustible12'}
@@ -111,12 +107,13 @@ class TestL10nMxEdiInvoiceFuel(InvoiceTransactionCase):
         refund.name = '0000123'
         refund.partner_bank_id.unlink()
         refund.partner_id = self.service_station
-        refund.l10n_mx_edi_partner_bank_id = self.service_station.bank_ids.id
+        refund.partner_bank_id = self.service_station.bank_ids.id
         refund.l10n_mx_edi_payment_method_id = invoice.l10n_mx_edi_payment_method_id.id # noqa
         refund.l10n_mx_edi_usage = 'P01'
         refund.action_post()
-        self.assertEqual(refund.l10n_mx_edi_pac_status, "signed",
-                         refund.message_ids.mapped('body'))
+        generated_files = self._process_documents_web_services(refund, {'cfdi_3_3'})
+        self.assertTrue(generated_files)
+        self.assertEqual(refund.edi_state, "sent", refund.message_ids.mapped('body'))
         xml = refund.l10n_mx_edi_get_xml_etree()
         namespaces = {
             'consumodecombustibles11': 'http://www.sat.gob.mx/ConsumoDeCombustibles11'}  # noqa
@@ -139,8 +136,9 @@ class TestL10nMxEdiInvoiceFuel(InvoiceTransactionCase):
         invoice.move_name = 'INV/2018/1001'
         invoice.partner_id = self.partner_chinaexport.parent_id
         invoice.action_post()
-        self.assertEqual(invoice.l10n_mx_edi_pac_status, "signed",
-                         invoice.message_ids.mapped('body'))
+        generated_files = self._process_documents_web_services(invoice, {'cfdi_3_3'})
+        self.assertTrue(generated_files)
+        self.assertEqual(invoice.edi_state, "sent", invoice.message_ids.mapped('body'))
         xml = invoice.l10n_mx_edi_get_xml_etree()
         xml_expected = objectify.fromstring(self.xml_expected_ecc_discount)
         self.xml_merge_dynamic_items(xml, xml_expected)
@@ -149,21 +147,23 @@ class TestL10nMxEdiInvoiceFuel(InvoiceTransactionCase):
         self.assertEqualXML(xml, xml_expected)
 
     def test_l10n_mx_edi_cc_invoice(self):
-        self.company.write({'l10n_mx_edi_isepi': False, })
-        self.company.partner_id.ref = '1234'
-        self.company.partner_id.category_id = [self.ref(
+        company = self.invoice.company_id
+        company.write({'l10n_mx_edi_isepi': False, })
+        company.partner_id.ref = '1234'
+        company.partner_id.category_id = [self.ref(
             'l10n_mx_edi_fuel.res_partner_category_service_station')]
-        self.partner_agrolait.parent_id.write(
+        self.partner_a.parent_id.write(
             {'vat': 'EKU9003173C9',
              'country_id': self.env.ref('base.mx').id})
         invoice = self.create_fuel_invoice()
         invoice.l10n_mx_edi_emitter_reference = "123456|000008955"
         invoice.l10n_mx_edi_origin = "01|B4536414-607E-42CA-AAB4-03EB964002A1"
-        invoice.partner_id = self.partner_agrolait.parent_id
+        invoice.partner_id = self.partner_a.parent_id
         invoice.move_name = 'INV/2018/1000'
         invoice.action_post()
-        self.assertEqual(invoice.l10n_mx_edi_pac_status, "signed",
-                         invoice.message_ids.mapped('body'))
+        generated_files = self._process_documents_web_services(invoice, {'cfdi_3_3'})
+        self.assertTrue(generated_files)
+        self.assertEqual(invoice.edi_state, "sent", invoice.message_ids.mapped('body'))
         xml = invoice.l10n_mx_edi_get_xml_etree()
         namespaces = {
             'consumodecombustibles11': 'http://www.sat.gob.mx/ConsumoDeCombustibles11'}  # noqa

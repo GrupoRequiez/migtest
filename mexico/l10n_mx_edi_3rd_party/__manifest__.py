@@ -2,14 +2,14 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 {
     'name': 'Third Party Complement for the Mexican Localization',
-    'version': '13.0.1.0.0',
+    'version': '14.0.1.0.0',
     'summary': 'Sell products on behalf of 3rd parties',
     'author': 'Vauxoo',
     'category': 'Hidden',
     'license': 'LGPL-3',
     'website': 'http://www.vauxoo.com/',
     'depends': [
-        'l10n_mx_edi',
+        'l10n_mx_edi_extended',
         'base_automation',
         'mrp',
     ],

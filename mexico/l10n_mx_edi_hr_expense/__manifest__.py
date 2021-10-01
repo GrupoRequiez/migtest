@@ -2,7 +2,7 @@
 
 {
     'name': 'Odoo Mexico Localization for Expenses',
-    'version': '13.0.1.1.0',
+    'version': '14.0.1.0.0',
     'author': 'Vauxoo',
     'category': 'Accounting',
     'license': 'OEEL-1',
@@ -13,6 +13,7 @@
     ],
     'data': [
         "security/groups.xml",
+        "security/ir.model.access.csv",
         "views/account_view.xml",
         "views/account_invoice_view.xml",
         "views/account_payment_view.xml",

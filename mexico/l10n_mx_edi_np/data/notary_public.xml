@@ -49,7 +49,7 @@
                                     t-att-Nombre="name[0]"
                                     t-att-ApellidoPaterno="name[1] if len(name) &gt; 1 else None"
                                     t-att-ApellidoMaterno="name[2] if len(name) &gt; 2 else None"
-                                    t-att-RFC="record.partner_id.l10n_mx_edi_get_customer_rfc()"
+                                    t-att-RFC="record.partner_id.vat.strip()"
                                     t-att-CURP="record.partner_id.l10n_mx_edi_curp"/>
                             </t>
                             <t t-if="partnership">

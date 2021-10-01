@@ -18,7 +18,7 @@
     LugarExpedicion="85134">
     <cfdi:Emisor
         Rfc="EKU9003173C9"
-        Nombre="YourCompany"
+        Nombre="YourCompany Factoring"
         RegimenFiscal="601"/>
     <cfdi:Receptor
         UsoCFDI="P01"

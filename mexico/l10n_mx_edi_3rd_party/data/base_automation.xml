@@ -26,8 +26,8 @@ for third in record.mapped('invoice_line_ids.l10n_mx_edi_3rd_party_id'):
         </field>
         <field name="trigger">on_change</field>
         <field name="active" eval="True"/>
-        <field name="filter_domain">[('l10n_mx_edi_pac_status', '=', 'signed')]</field>
-        <field name="on_change_fields">l10n_mx_edi_pac_status</field>
+        <field name="filter_domain">[('edi_state', '=', 'signed')]</field>
+        <field name="trigger_field_ids" eval="[ref('account_edi.field_account_move__edi_state')]"/>
     </record>
 
 </odoo>

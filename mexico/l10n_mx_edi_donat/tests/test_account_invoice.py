@@ -1,21 +1,18 @@
+from lxml.objectify import fromstring
 
-from odoo.addons.l10n_mx_edi.tests.common import InvoiceTransactionCase
+from odoo.addons.l10n_mx_edi.tests.common import TestMxEdiCommon
 
 
-class TestL10nMxEdiInvoiceDonat(InvoiceTransactionCase):
+class TestL10nMxEdiInvoiceDonat(TestMxEdiCommon):
 
-    def setUp(self):
-        super(TestL10nMxEdiInvoiceDonat, self).setUp()
-        isr_tag = self.env['account.account.tag'].search(
-            [('name', '=', 'ISR')])
-        for rep_line in self.tax_negative.invoice_repartition_line_ids:
-            rep_line.tag_ids |= isr_tag
+    def test_l10n_mx_edi_invoice_donat(self):
+        self.certificate._check_credentials()
         self.namespaces = {
             'donat': 'http://www.sat.gob.mx/donat'}
-        self.partner_agrolait.write({
+        self.partner_a.write({
             'l10n_mx_edi_donations': True,
         })
-        self.company.write({
+        self.invoice.company_id.write({
             'l10n_mx_edi_donat_auth': '12345',
             'l10n_mx_edi_donat_date': '2017-01-23',
             'l10n_mx_edi_donat_note': 'Este comprobante ampara un donativo,'
@@ -24,13 +21,12 @@ class TestL10nMxEdiInvoiceDonat(InvoiceTransactionCase):
             ' sido deducidos previamente para los efectos del impuesto sobre'
             ' la renta, este donativo no es deducible.',
         })
-
-    def test_l10n_mx_edi_invoice_donat(self):
-        invoice = self.create_invoice()
+        invoice = self.invoice
         invoice.action_post()
-        self.assertEqual(invoice.l10n_mx_edi_pac_status, "signed",
-                         invoice.message_ids.mapped('body'))
-        xml = invoice.l10n_mx_edi_get_xml_etree()
+        generated_files = self._process_documents_web_services(self.invoice, {'cfdi_3_3'})
+        self.assertTrue(generated_files)
+        self.assertEqual(invoice.edi_state, "sent", invoice.message_ids.mapped('body'))
+        xml = fromstring(generated_files[0])
         scp = xml.Complemento.xpath('//donat:Donatarias',
                                     namespaces=self.namespaces)
         self.assertTrue(scp, 'Complement to Donatarias not added correctly')

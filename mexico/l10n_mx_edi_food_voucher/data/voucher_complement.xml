@@ -17,14 +17,14 @@
                         version="1.0"
                         tipoOperacion="monedero electrónico"
                         t-att-registroPatronal="record.partner_id.ref or False"
-                        t-att-numeroDeCuenta="record.l10n_mx_edi_partner_bank_id.acc_number"
+                        t-att-numeroDeCuenta="record.partner_bank_id.acc_number"
                         t-att-total="sum(voucher_products.mapped('price_unit'))">
                         <valesdedespensa:Conceptos>
                             <t t-foreach="voucher_products" t-as="person">
                                 <valesdedespensa:Concepto
                                     t-att-identificador="person.l10n_mx_edi_voucher_id.ref"
                                     t-att-fecha="('T').join(('{:%Y-%m-%d}'.format(record.invoice_date), record.l10n_mx_edi_time_invoice))"
-                                    t-att-rfc="person.l10n_mx_edi_voucher_id.l10n_mx_edi_get_customer_rfc()"
+                                    t-att-rfc="person.l10n_mx_edi_voucher_id.vat.strip()"
                                     t-att-curp="person.l10n_mx_edi_voucher_id.l10n_mx_edi_curp"
                                     t-att-nombre="person.l10n_mx_edi_voucher_id.name"
                                     t-att-numSeguridadSocial="person.l10n_mx_edi_voucher_id.l10n_mx_edi_voucher_nss"
@@ -35,12 +35,12 @@
                 </cfdi:Complemento>
             </t>
         </xpath>
-        <xpath expr="//*[local-name()='Conceptos']/t" position="attributes">
-             <attribute name="t-foreach">record.invoice_line_ids - voucher_products</attribute>
+        <xpath expr="//*[local-name()='Conceptos']" position="before">
+            <t t-set="invoice_line_values" t-value="[line for line in invoice_line_values if not line['line'].l10n_mx_edi_voucher_id and line['price_subtotal_unit'] != 0]"/>
         </xpath>
         <xpath expr="//*[local-name()='Comprobante']" position="attributes">
-            <attribute name="t-att-SubTotal">'%.2f' % (float(amount_untaxed) - sum(record.invoice_line_ids.filtered('l10n_mx_edi_voucher_id').mapped('price_subtotal')))</attribute>
-            <attribute name="t-att-Total">'%.2f' % (float(amount_total) - sum(record.invoice_line_ids.filtered('l10n_mx_edi_voucher_id').mapped('price_subtotal')))</attribute>
+            <attribute name="t-att-SubTotal">format_float(total_amount_untaxed_wo_discount - sum(record.invoice_line_ids.filtered('l10n_mx_edi_voucher_id').mapped('price_subtotal')), currency_precision)</attribute>
+            <attribute name="t-att-Total">format_float(record.amount_total - sum(record.invoice_line_ids.filtered('l10n_mx_edi_voucher_id').mapped('price_subtotal')), currency_precision)</attribute>
         </xpath>
     </template>
 </odoo>

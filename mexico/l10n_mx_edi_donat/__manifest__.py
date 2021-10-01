@@ -1,7 +1,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 {
     'name': 'EDI Complement for Mexico Donations',
-    'version': '13.0.1.0.0',
+    'version': '14.0.1.0.0',
     "license": "LGPL-3",
     "author": "Vauxoo",
     'category': 'Hidden',

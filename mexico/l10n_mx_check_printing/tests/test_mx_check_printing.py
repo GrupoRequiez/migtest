@@ -1,11 +1,11 @@
 import time
 from odoo.tests import tagged
 from odoo.tests.common import Form
-from odoo.addons.account.tests.account_test_classes import AccountingTestCase
+from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
 
 @tagged('post_install', '-at_install')
-class TestMXCheckPrinting(AccountingTestCase):
+class TestMXCheckPrinting(AccountTestInvoicingCommon):
 
     def setUp(self):
         super(TestMXCheckPrinting, self).setUp()
@@ -32,7 +32,7 @@ class TestMXCheckPrinting(AccountingTestCase):
         invoice = self.invoice_model.create({
             'partner_id': self.partner_jackson.id,
             'name': "Supplier Invoice",
-            'type': "in_invoice",
+            'move_type': "in_invoice",
             'invoice_date': time.strftime('%Y') + '-06-26',
             'invoice_line_ids': [(0, 0, {
                 'product_id': self.product.id,
@@ -48,9 +48,8 @@ class TestMXCheckPrinting(AccountingTestCase):
     def create_payment(self, invoices):
         ctx = {'active_model': 'account.move', 'active_ids': invoices.ids}
         payment_register = Form(self.env['account.payment'].with_context(ctx))
-        payment_register.payment_date = time.strftime('%Y') + '-07-15'
+        payment_register.date = time.strftime('%Y') + '-07-15'
         payment_register.journal_id = self.bank_journal
-        payment_register.communication = 'With Check'
         payment_register.amount = invoices.amount_total
         payment_register.payment_method_id = self.payment_method_check
         payment = payment_register.save()

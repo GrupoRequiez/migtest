@@ -1,16 +1,11 @@
-import base64
+from lxml.objectify import fromstring
 
-from lxml import objectify
-
-from odoo.addons.l10n_mx_edi.tests.common import InvoiceTransactionCase
+from odoo.addons.l10n_mx_edi.tests.common import TestMxEdiCommon
 
 
-class TestL10nMxEdiInvoiceEAPA(InvoiceTransactionCase):
+class TestL10nMxEdiInvoiceEAPA(TestMxEdiCommon):
 
     def test_l10n_mx_edi_invoice_eapa(self):
-        isr_tag = self.env['account.account.tag'].search(
-            [('name', '=', 'ISR')])
-        self.tax_negative.tag_ids |= isr_tag
         self.product.write({
             'l10n_mx_edi_art_complement': 'eapa',
             'l10n_mx_edi_good_type': '03',
@@ -21,11 +16,12 @@ class TestL10nMxEdiInvoiceEAPA(InvoiceTransactionCase):
             'l10n_mx_edi_characteristic': '06',
             'standard_price': 1000,
         })
-        invoice = self.create_invoice()
+        invoice = self.invoice
         invoice.action_post()
-        self.assertEqual(invoice.l10n_mx_edi_pac_status, "signed",
-                         invoice.message_ids.mapped('body'))
-        xml = invoice.l10n_mx_edi_get_xml_etree()
+        generated_files = self._process_documents_web_services(self.invoice, {'cfdi_3_3'})
+        self.assertTrue(generated_files)
+        self.assertEqual(invoice.edi_state, "sent", invoice.message_ids.mapped('body'))
+        xml = fromstring(generated_files[0])
         namespaces = {
             'obrasarte': 'http://www.sat.gob.mx/arteantiguedades'}
         eapa = xml.Complemento.xpath('//obrasarte:obrasarteantiguedades',
@@ -34,15 +30,12 @@ class TestL10nMxEdiInvoiceEAPA(InvoiceTransactionCase):
 
     def test_l10n_mx_edi_xsd(self):
         """Verify that xsd file is downloaded"""
-        self.company._load_xsd_attachments()
+        self.invoice.company_id._load_xsd_attachments()
         xsd_file = self.ref(
             'l10n_mx_edi.xsd_cached_obrasarteantiguedades_xsd')
         self.assertTrue(xsd_file, 'XSD file not load')
 
     def test_invoice_payment_in_kind(self):
-        isr_tag = self.env['account.account.tag'].search(
-            [('name', '=', 'ISR')])
-        self.tax_negative.tag_ids |= isr_tag
         self.donation = self.env['product.product'].create({
             'name': 'Painting',
             'lst_price': '1.00',
@@ -52,21 +45,20 @@ class TestL10nMxEdiInvoiceEAPA(InvoiceTransactionCase):
             'l10n_mx_edi_acquisition_date': '2000/01/19',
             'l10n_mx_edi_pik_dimension': '2m height and 2m width',
         })
-        self.donation.l10n_mx_edi_code_sat_id = self.ref('l10n_mx_edi.prod_code_sat_01010101') # noqa
+        self.donation.unspsc_code_id = self.ref('product_unspsc.unspsc_code_01010101')
         self.donation.taxes_id.unlink()
 
-        invoice = self.create_invoice()
+        invoice = self.invoice
         invoice.sudo().partner_id.ref = 'A&C8317286A1-18000101-020'
         invoice.name = 'PE-53-78436'
         self.create_donation_line(invoice, self.donation)
         invoice.message_ids.unlink()
         invoice.action_post()
-        self.assertEqual(invoice.l10n_mx_edi_pac_status, "signed",
-                         invoice.message_ids.mapped('body'))
-        xml_str = base64.b64decode(
-            invoice.message_ids[-2].attachment_ids.datas)
-        xml = objectify.fromstring(xml_str)
-        xml_expected = objectify.fromstring(
+        generated_files = self._process_documents_web_services(self.invoice, {'cfdi_3_3'})
+        self.assertTrue(generated_files)
+        self.assertEqual(invoice.edi_state, "sent", invoice.message_ids.mapped('body'))
+        xml = fromstring(generated_files[0])
+        xml_expected = fromstring(
             '<pagoenespecie:PagoEnEspecie '
             'xmlns:pagoenespecie="http://www.sat.gob.mx/pagoenespecie" '
             'Version="1.0" CvePIC="A&amp;C8317286A1-18000101-020" '

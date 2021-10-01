@@ -14,6 +14,6 @@
         <field name="name">ACT</field>
         <field name="factor" eval="1.0"/>
         <field name="rounding" eval="0.001"/>
-        <field name="l10n_mx_edi_code_sat_id" ref="l10n_mx_edi.prod_code_sat_ACT"/>
+        <field name="unspsc_code_id" ref="product_unspsc.unspsc_code_ACT"/>
     </record>
 </odoo>

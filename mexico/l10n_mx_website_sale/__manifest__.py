@@ -6,7 +6,7 @@
         Adds the fields related to the Mexico localisation to all
         frontend forms that are related to a partner creation/modification
     """,
-    "version": "13.0.1.0.0",
+    "version": "14.0.1.0.0",
     "author": "Vauxoo",
     "category": "Localization/Mexico",
     "website": "http://www.vauxoo.com/",

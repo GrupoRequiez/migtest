@@ -10,7 +10,6 @@
         <field name="user_type_id" ref="account_type_other"/>
     </record>
     <record id="pos_account_invoice" model="account.move">
-       <field name="l10n_mx_edi_cfdi_name">AAA010101AAA_False</field>
        <field name="partner_id" ref="base.res_partner_12"/>
     </record>
     <record id="pos_invoice_line_01" model="account.move.line">

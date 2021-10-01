@@ -23,7 +23,7 @@ class AccountMove(models.Model):
         uuid_domain = self._search_l10n_mx_edi_cfdi_uuid(
             operator='=', value=name)
         invoices = self.search(uuid_domain + args, limit=limit)
-        res = invoices.name_get()
+        res = invoices.ids
         if not invoices:
             res = super(AccountMove, self)._name_search(
                 name, args, operator, limit, name_get_uid)
@@ -64,8 +64,11 @@ class AccountMove(models.Model):
                           else '|')
         return domain
 
-    @api.depends('l10n_mx_edi_cfdi_name')
+    @api.depends('edi_document_ids')
     def _compute_l10n_mx_edi_cfdi_uuid(self, return_dict=None):
+        if not self.ids:
+            self.l10n_mx_edi_cfdi_uuid = False
+            return {}
         self.env.cr.execute("""
             SELECT res_id, l10n_mx_edi_cfdi_uuid
             FROM ir_attachment
@@ -79,7 +82,7 @@ class AccountMove(models.Model):
         for inv in self:
             inv.l10n_mx_edi_cfdi_uuid = res.get(inv.id)
 
-    @api.constrains('state', 'l10n_mx_edi_cfdi_name')
+    @api.constrains('state', 'edi_document_ids')
     def _check_uuid_duplicated(self):
         invoices = self.exists()
         mx_invoices = invoices.filtered(
@@ -91,17 +94,23 @@ class AccountMove(models.Model):
         if invoice_ids and not set(mx_invoices.mapped('state')) - to_omit:
             # If exists invoice but has state draft or cancel then skip check
             return
-        query = """SELECT l10n_mx_edi_cfdi_uuid, array_agg(inv.id)
-            FROM ir_attachment att
-            INNER JOIN account_move inv
-                ON inv.id = att.res_id AND att.res_model = %%s AND
-                   inv.state NOT IN %%s AND
-                   l10n_mx_edi_cfdi_uuid IS NOT NULL
+        query = """
+            SELECT
+                MIN(l10n_mx_edi_cfdi_uuid), array_agg(DISTINCT inv.id)
+            FROM
+                ir_attachment att
+            INNER JOIN
+                account_move inv
+            ON inv.id = att.res_id
+                AND att.res_model = %%s
+                AND inv.state NOT IN %%s
+                AND l10n_mx_edi_cfdi_uuid IS NOT NULL
+                AND inv.company_id = %%s
             %s
-            GROUP BY l10n_mx_edi_cfdi_uuid
-            HAVING count(*) >= 2
+            GROUP BY trim(upper(l10n_mx_edi_cfdi_uuid))
+            HAVING count(DISTINCT inv.id) >= 2
         """
-        params = (self._name, tuple(to_omit))
+        params = (self._name, tuple(to_omit), self.env.user.company_id.id)
         query_where = ""
         if invoice_ids:
             uuids = self.env['ir.attachment'].search_read([
@@ -109,7 +118,7 @@ class AccountMove(models.Model):
                 ('res_id', 'in', invoice_ids),
                 ('res_model', '=', 'account.move')],
                 ['l10n_mx_edi_cfdi_uuid'])
-            uuids = set([uuid['l10n_mx_edi_cfdi_uuid'] for uuid in uuids])
+            uuids = {uuid['l10n_mx_edi_cfdi_uuid'] for uuid in uuids}
             if not uuids:
                 # Skip if exists invoices but don't have uuids
                 return
@@ -120,12 +129,17 @@ class AccountMove(models.Model):
         res = dict(self.env.cr.fetchall())
         msg = ""
         for uuid, record_ids in res.items():
-            unique_record_ids = set(record_ids)
-            if len(unique_record_ids) <= 1:
-                continue
-            records = self.browse(unique_record_ids)
+            records = self.browse(record_ids)
             msg += _("UUID duplicated %s for following invoices:\n%s\n") % (
                 uuid, '\n'.join(['\t* %d: %s' % (rid, rname)
                                  for rid, rname in records.name_get()]))
         if msg:
             raise ValidationError(msg)
+
+    @api.depends('edi_document_ids')
+    def _compute_cfdi_values(self):
+        """Inherit method to re-compute the field `l10n_mx_edi_cfdi_uuid` that is also set in this method.
+        """
+        res = super(AccountMove, self)._compute_cfdi_values()
+        self._compute_l10n_mx_edi_cfdi_uuid()
+        return res

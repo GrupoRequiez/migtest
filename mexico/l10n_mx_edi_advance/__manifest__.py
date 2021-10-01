@@ -8,9 +8,10 @@
     'website': "http://www.vauxoo.com",
     'license': 'AGPL-3',
     'category': 'Hidden',
-    'version': '13.0.1.0.0',
+    'version': '14.0.1.0.0',
     'depends': [
         'l10n_mx_edi',
+        'l10n_mx_edi_uuid',
     ],
     'data': [
         'views/account_invoice_view.xml',

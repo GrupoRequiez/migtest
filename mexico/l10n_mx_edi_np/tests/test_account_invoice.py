@@ -1,18 +1,15 @@
+from lxml.objectify import fromstring
 
-from odoo.addons.l10n_mx_edi.tests.common import InvoiceTransactionCase
+from odoo.addons.l10n_mx_edi.tests.common import TestMxEdiCommon
 
 
-class TestL10nMxEdiInvoiceNP(InvoiceTransactionCase):
+class TestL10nMxEdiInvoiceNP(TestMxEdiCommon):
 
     def setUp(self):
         super(TestL10nMxEdiInvoiceNP, self).setUp()
-        isr_tag = self.env['account.account.tag'].search(
-            [('name', '=', 'ISR')])
-        for rep_line in self.tax_negative.invoice_repartition_line_ids:
-            rep_line.tag_ids |= isr_tag
         self.user_billing.partner_id.write({
             'l10n_mx_edi_curp': 'TICE700419HCLJND07'})
-        self.company.write({'company_registry': '123'})
+        self.invoice.company_id.write({'company_registry': '123'})
         self.client = self.env['res.partner'].create({
             'name': 'Pablo, Perez',
             'vat': 'XEXX010101000',
@@ -34,18 +31,20 @@ class TestL10nMxEdiInvoiceNP(InvoiceTransactionCase):
             'parent_id': self.client.id,
             'ref': '25000.98|10'
         })
+        self.certificate._check_credentials()
 
     def test_l10n_mx_edi_np_single(self):
-        invoice = self.create_invoice()
+        invoice = self.invoice
         invoice.write({
             'partner_id': self.client.id,
             'l10n_mx_edi_np_partner_id': self.buyer.id,
             'name': '1234',
         })
         invoice.action_post()
-        self.assertEqual(invoice.l10n_mx_edi_pac_status, "signed",
-                         invoice.message_ids.mapped('body'))
-        xml = invoice.l10n_mx_edi_get_xml_etree()
+        generated_files = self._process_documents_web_services(self.invoice, {'cfdi_3_3'})
+        self.assertTrue(generated_files)
+        self.assertEqual(invoice.edi_state, "sent", invoice.message_ids.mapped('body'))
+        xml = fromstring(generated_files[0])
         namespaces = {
             'notariospublicos': 'http://www.sat.gob.mx/notariospublicos'}
         comp = xml.Complemento.xpath('//notariospublicos:NotariosPublicos',
@@ -70,16 +69,17 @@ class TestL10nMxEdiInvoiceNP(InvoiceTransactionCase):
             'parent_id': self.buyer.id,
             'comment': '50',
         })
-        invoice = self.create_invoice()
+        invoice = self.invoice
         invoice.write({
             'partner_id': self.client.id,
             'l10n_mx_edi_np_partner_id': self.buyer.id,
             'name': '1234',
         })
         invoice.action_post()
-        self.assertEqual(invoice.l10n_mx_edi_pac_status, "signed",
-                         invoice.message_ids.mapped('body'))
-        xml = invoice.l10n_mx_edi_get_xml_etree()
+        generated_files = self._process_documents_web_services(self.invoice, {'cfdi_3_3'})
+        self.assertTrue(generated_files)
+        self.assertEqual(invoice.edi_state, "sent", invoice.message_ids.mapped('body'))
+        xml = fromstring(generated_files[0])
         namespaces = {
             'notariospublicos': 'http://www.sat.gob.mx/notariospublicos'}
         comp1 = xml.Complemento.xpath(

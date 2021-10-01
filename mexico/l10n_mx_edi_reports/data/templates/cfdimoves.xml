@@ -28,20 +28,20 @@
                             t-att-Haber="'%.2f' % line.credit">
                             <t t-set="cfdi" t-value="line.payment_id or invoice"/>
                             <!-- This section is to moves from an invoice -->
-                            <t t-if="'invoice' in line.move_id.type">
+                            <t t-if="'invoice' in line.move_id.move_type">
                                 <t t-if="cfdi.l10n_mx_edi_cfdi_uuid">
                                     <!-- Only consider moves with UUID, because that attribute is required in the node -->
                                     <PLZ:CompNal
                                         t-att-UUID_CFDI="cfdi.l10n_mx_edi_cfdi_uuid"
-                                        t-att-RFC="cfdi.l10n_mx_edi_cfdi_customer_rfc if cfdi.type in ('out_invoice', 'out_refund') else cfdi.l10n_mx_edi_cfdi_supplier_rfc"
+                                        t-att-RFC="cfdi.l10n_mx_edi_cfdi_customer_rfc if cfdi.move_type in ('out_invoice', 'out_refund') else cfdi.l10n_mx_edi_cfdi_supplier_rfc"
                                         t-att-MontoTotal="'%.2f' % cfdi.amount_total"
                                         t-att-Moneda="cfdi.currency_id.name if cfdi.currency_id.name != 'MXN' else False"
                                         t-att-TipCamb="'%.5f' % line._get_cfdi_rate() if cfdi.currency_id.name != 'MXN' else None"/>
                                 </t>
-                                <t t-if="cfdi.partner_id.commercial_partner_id.country_id.code != 'MX' and not cfdi.l10n_mx_edi_cfdi_uuid and 'invoice' in cfdi.type and cfdi.ref">
+                                <t t-if="cfdi.partner_id.commercial_partner_id.country_id.code != 'MX' and not cfdi.l10n_mx_edi_cfdi_uuid and 'invoice' in cfdi.move_type and cfdi.ref">
                                     <PLZ:CompExt
                                         t-att-NumFactExt="(cfdi.ref or '')[:36]"
-                                        t-att-TaxID="((cfdi if cfdi.type in ('out_invoice', 'out_refund') else cfdi.company_id).partner_id.vat or '')[:30]"
+                                        t-att-TaxID="((cfdi if cfdi.move_type in ('out_invoice', 'out_refund') else cfdi.company_id).partner_id.vat or '')[:30]"
                                         t-att-MontoTotal="'%.2f' % cfdi.amount_total"
                                         t-att-Moneda="cfdi.currency_id.name if cfdi.currency_id.name != 'MXN' else False"
                                         t-att-TipCamb="'%.5f' % line._get_cfdi_rate() if cfdi.currency_id.name != 'MXN' else None"/>
@@ -51,24 +51,26 @@
                             <t t-if="line.payment_id">
                                 <t t-set="invoices" t-value="cfdi"/>
                                 <t t-if="invoices and cfdi.l10n_mx_edi_payment_method_id.code =='02' and cfdi.payment_type != 'transfer'">
-                                    <t t-set="origin" t-value="line.payment_id.l10n_mx_edi_partner_bank_id if cfdi.payment_type == 'inbound' else cfdi.journal_id.bank_account_id"/>
+                                    <t t-set="origin" t-value="line.payment_id.partner_bank_id if cfdi.payment_type == 'inbound' else cfdi.journal_id.bank_account_id"/>
                                     <t t-set="national" t-value="True if origin.bank_id.country.code == 'MX' else False"/>
+                                    <t t-set="partner" t-value="(cfdi if cfdi.payment_type == 'outbound' else company).partner_id"/>
                                     <PLZ:Cheque
-                                        t-att-Num="(cfdi.communication or '')[:20] or None"
+                                        t-att-Num="(cfdi.ref or '')[:20] or None"
                                         t-att-BanEmisNal="origin.bank_id.l10n_mx_edi_code if national else '999'"
                                         t-att-BanEmisExt="((origin.bank_id.name or '')[:150] or None) if not national else None"
                                         t-att-CtaOri="(origin.acc_number or '')[:50] or None"
-                                        t-att-Fecha="cfdi.payment_date"
+                                        t-att-Fecha="cfdi.date"
                                         t-att-Benef="((cfdi.partner_id.name or 'NA') if cfdi.payment_type == 'outbound' else company.name)[:300]"
-                                        t-att-RFC="(cfdi if cfdi.payment_type == 'outbound' else company).partner_id.l10n_mx_edi_get_customer_rfc()"
+                                        t-att-RFC="'XEXX010101000' if partner.country_id and partner.country_id.code != 'MX' else 'XAXX010101000' if partner.country_id.code in (False, 'MX') else partner.vat"
                                         t-att-Monto="'%.2f' % cfdi.amount"
                                         t-att-Moneda="cfdi.currency_id.name if cfdi.currency_id.name != 'MXN' else False"
                                         t-att-TipCamb="'%.5f' % line._get_cfdi_rate() if cfdi.currency_id.name != 'MXN' else None"/>
                                 </t>
                                 <t t-if="line.payment_id and (cfdi.l10n_mx_edi_payment_method_id.code == '03' or (cfdi.payment_type == 'transfer' and cfdi.journal_id.type == 'bank' and cfdi.destination_journal_id.type == 'bank'))">
-                                    <t t-set="origin" t-value="line.payment_id.l10n_mx_edi_partner_bank_id if cfdi.payment_type == 'inbound' else cfdi.journal_id.bank_account_id"/>
+                                    <t t-set="origin" t-value="line.payment_id.partner_bank_id if cfdi.payment_type == 'inbound' else cfdi.journal_id.bank_account_id"/>
                                     <t t-set="national" t-value="True if origin.bank_id.country.code == 'MX' else False"/>
-                                    <t t-set="dest" t-value="cfdi.journal_id.bank_account_id if cfdi.payment_type != 'outbound' else line.payment_id.l10n_mx_edi_partner_bank_id"/>
+                                    <t t-set="dest" t-value="cfdi.journal_id.bank_account_id if cfdi.payment_type != 'outbound' else line.payment_id.partner_bank_id"/>
+                                    <t t-set="partner" t-value="company.vat if cfdi.payment_type == 'transfer' else cfdi.partner_id"/>
                                     <PLZ:Transferencia
                                         t-att-CtaOri="(origin.acc_number or '')[:50] or None"
                                         t-att-BancoOriNal="origin.bank_id.l10n_mx_edi_code if national else '999'"
@@ -76,19 +78,20 @@
                                         t-att-CtaDest="(dest.acc_number or '')[:50] or None"
                                         t-att-BancoDestNal="dest.bank_id.l10n_mx_edi_code if dest.bank_id.country.code == 'MX' else '999'"
                                         t-att-BancoDestExt="((dest.bank_id.name or '')[:150] or None) if not dest.bank_id.country.code == 'MX' else None"
-                                        t-att-Fecha="cfdi.payment_date"
+                                        t-att-Fecha="cfdi.date"
                                         t-att-Benef="((cfdi.partner_id.name or 'NA') if cfdi.payment_type == 'outbound' else company.name)[:300]"
-                                        t-att-RFC="company.vat if cfdi.payment_type == 'transfer' else cfdi.partner_id.l10n_mx_edi_get_customer_rfc()"
+                                        t-att-RFC="'XEXX010101000' if partner.country_id and partner.country_id.code != 'MX' else 'XAXX010101000' if partner.country_id.code in (False, 'MX') else partner.vat"
                                         t-att-Monto="'%.2f' % cfdi.amount"
                                         t-att-Moneda="cfdi.currency_id.name if cfdi.currency_id.name != 'MXN' else False"
                                         t-att-TipCamb="'%.5f' % line._get_cfdi_rate() if cfdi.currency_id.name != 'MXN' else None"/>
                                 </t>
                                 <t t-if="line.payment_id and cfdi.l10n_mx_edi_payment_method_id.code not in ('02','03') and cfdi.payment_type != 'transfer'">
+                                    <t t-set="partner" t-value="(cfdi if cfdi.payment_type == 'outbound' else company).partner_id"/>
                                     <PLZ:OtrMetodoPago
                                         t-att-MetPagoPol="'99' if cfdi.l10n_mx_edi_payment_method_id.code in other else cfdi.l10n_mx_edi_payment_method_id.code or '99'"
-                                        t-att-Fecha="cfdi.payment_date"
-                                        t-att-Benef="((cfdi.partner_id.name if cfdi.payment_type == 'outbound' else company.name) or 'NA')[:300]"
-                                        t-att-RFC="(cfdi if cfdi.payment_type == 'outbound' else company).partner_id.l10n_mx_edi_get_customer_rfc()"
+                                        t-att-Fecha="cfdi.date"
+                                        t-att-Benef="(cfdi.partner_id.name if cfdi.payment_type == 'outbound' else company.name)[:300]"
+                                        t-att-RFC="'XEXX010101000' if partner.country_id and partner.country_id.code != 'MX' else 'XAXX010101000' if partner.country_id.code in (False, 'MX') else partner.vat"
                                         t-att-Monto="'%.2f' % cfdi.amount"
                                         t-att-Moneda="cfdi.currency_id.name if cfdi.currency_id.name != 'MXN' else False"
                                         t-att-TipCamb="'%.5f' % line._get_cfdi_rate() if cfdi.currency_id.name != 'MXN' else None"/>

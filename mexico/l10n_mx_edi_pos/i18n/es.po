@@ -234,6 +234,17 @@ msgid "Indicate if this order was consider in the session XML"
 msgstr "Indica si esta orden ya fue considerada en el XML de la sesión"
 
 #. module: l10n_mx_edi_pos
+#: model:ir.model.fields,help:l10n_mx_edi_pos.field_pos_payment_method__l10n_mx_edi_payment_method_id
+msgid ""
+"Indicates the way the pos order was/will be paid, where the options could "
+"be: Cash, Nominal Check, Credit Card, etc. Leave empty if unkown and the "
+"XML will show \"Unidentified\"."
+msgstr ""
+"Indica la forma en que se pagó o se pagará la Orden del pos, donde las "
+"opciones podrían ser: Efectivo, Cheque, Tarjeta de Crédito, etc. Deje vacía "
+"si no conoce la forma de pago y el XML mostrará \"No Identificado\"."
+
+#. module: l10n_mx_edi_pos
 #: model:ir.model.fields,field_description:l10n_mx_edi_pos.field_report_l10n_mx_edi_pos_report_xml_session____last_update
 msgid "Last Modified on"
 msgstr "Última modificación en"

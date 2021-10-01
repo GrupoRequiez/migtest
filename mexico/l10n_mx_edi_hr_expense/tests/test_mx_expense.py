@@ -38,8 +38,7 @@ class EdiHrExpense(TransactionCase):
             'name': 'Pieter Card',
             'type': 'cash',
             'code': 'EP',
-            'default_debit_account_id': self.account.id,
-            'default_credit_account_id': self.account.id,
+            'default_account_id': self.account.id,
         })
         self.uid = self.env['res.users'].create({
             'name': 'User expense mx',
@@ -271,13 +270,11 @@ class EdiHrExpense(TransactionCase):
             ('type', '=', 'bank')], limit=1)
         payment_register = Form(self.env[
             'account.payment'].sudo().with_context(ctx))
-        payment_register.payment_date = invoice.date
-        payment_register.payment_method_id = self.env.ref(
-            'account.account_payment_method_manual_in')
+        payment_register.date = invoice.date
+        payment_register.payment_method_id = self.env.ref('account.account_payment_method_manual_in')
         payment_register.journal_id = bank_journal
-        payment_register.communication = invoice.name
         payment_register.amount = invoice.amount_total
-        payment_register.save().post()
+        payment_register.save().action_post()
         self.assertEquals('done', expense.state,
                           'The expense was not marked like paid')
         move_line = invoice._get_reconciled_payments().sudo().move_line_ids

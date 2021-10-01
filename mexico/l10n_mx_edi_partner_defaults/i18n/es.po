@@ -32,8 +32,8 @@ msgstr "Factura"
 
 #. module: l10n_mx_edi_partner_defaults
 #: model:ir.model.fields,field_description:l10n_mx_edi_partner_defaults.field_res_partner__l10n_mx_edi_payment_method_id
-msgid "Payment Method"
-msgstr "Método de pago"
+msgid "Payment Way"
+msgstr "Forma de pago"
 
 #. module: l10n_mx_edi_partner_defaults
 #: model:ir.model,name:l10n_mx_edi_partner_defaults.model_account_payment

@@ -54,7 +54,7 @@ class TestProductRefundAccounts(TransactionCase):
 
     def test_001_out_refund(self):
         self.invoice.write({
-            'type': 'out_refund',
+            'move_type': 'out_refund',
         })
         line = self.env['account.move.line'].new({
             'move_id': self.invoice.id,
@@ -77,7 +77,7 @@ class TestProductRefundAccounts(TransactionCase):
 
     def test_002_in_refund(self):
         self.invoice.write({
-            'type': 'in_refund',
+            'move_type': 'in_refund',
         })
         line = self.env['account.move.line'].new({
             'move_id': self.invoice.id,

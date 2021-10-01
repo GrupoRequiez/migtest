@@ -6,53 +6,70 @@ from lxml import objectify
 from odoo.tools import misc
 from odoo.tests.common import Form
 
-from odoo.addons.l10n_mx_edi.tests.common import InvoiceTransactionCase
+from odoo.addons.l10n_mx_edi.tests.common import TestMxEdiCommon
 
 
-class TestMxEdiFactoring(InvoiceTransactionCase):
-    def setUp(self):
-        super(TestMxEdiFactoring, self).setUp()
-        isr_tag = self.env['account.account.tag'].search(
-            [('name', '=', 'ISR')])
-        for rep_line in self.tax_negative.invoice_repartition_line_ids:
-            rep_line.tag_ids |= isr_tag
+class TestMxEdiFactoring(TestMxEdiCommon):
 
-    def test_001_factoring(self):
-        invoice = self.create_invoice()
-        invoice.company_id.sudo().name = 'YourCompany'
+    def test_factoring(self):
+        self.certificate._check_credentials()
+        invoice = self.invoice
+        invoice.company_id.sudo().name = 'YourCompany Factoring'
         invoice.action_post()
-        self.assertEqual(
-            invoice.l10n_mx_edi_pac_status, "signed",
-            invoice.message_ids.mapped('body'))
+        generated_files = self._process_documents_web_services(self.invoice, {'cfdi_3_3'})
+        self.assertTrue(generated_files)
+        self.assertEqual(invoice.edi_state, "sent", invoice.message_ids.mapped('body'))
         factoring = invoice.partner_id.sudo().create({
             'name': 'Financial Factoring',
             'country_id': self.env.ref('base.mx').id,
             'type': 'invoice',
         })
-        invoice.partner_id.sudo().commercial_partner_id.l10n_mx_edi_factoring_id = factoring.id  # noqa
+        invoice.partner_id.sudo().commercial_partner_id.l10n_mx_edi_factoring_id = factoring
+        invoice.l10n_mx_edi_factoring_id = factoring
         # Register the payment
-        ctx = {'active_model': 'account.move', 'active_ids': invoice.ids,
-               'force_ref': True}
-        bank_journal = self.env['account.journal'].search([
-            ('type', '=', 'bank')], limit=1)
-        payment_register = Form(self.env['account.payment'].with_context(ctx))
-        payment_register.payment_date = invoice.date
-        payment_register.l10n_mx_edi_payment_method_id = self.env.ref(
-            'l10n_mx_edi.payment_method_efectivo')
-        payment_register.payment_method_id = self.env.ref(
-            'account.account_payment_method_manual_in')
-        payment_register.journal_id = bank_journal
-        payment_register.communication = invoice.name
-        payment_register.amount = invoice.amount_total
-        payment_register.save().post()
+        ctx = {'active_model': 'account.move', 'active_ids': invoice.ids, 'force_ref': True}
+        bank_journal = self.env['account.journal'].search([('type', '=', 'bank'),
+                                                           ('company_id', '=', invoice.company_id.id)], limit=1)
+        payment = Form(self.env['account.payment.register'].with_context(ctx))
+        payment.payment_date = invoice.date
+        payment.l10n_mx_edi_payment_method_id = self.env.ref('l10n_mx_edi.payment_method_efectivo')
+        payment.payment_method_id = self.env.ref('account.account_payment_method_manual_in')
+        payment.journal_id = bank_journal
+        payment.amount = invoice.amount_total
+        payment.save().action_create_payments()
         payment = invoice._get_reconciled_payments()
-        self.assertTrue(invoice.l10n_mx_edi_factoring_id,
-                        'Financial Factor not assigned')
+
+        self.assertTrue(invoice.l10n_mx_edi_factoring_id, 'Financial Factor not assigned')
+        payment.action_l10n_mx_edi_force_generate_cfdi()
+        generated_files = self._process_documents_web_services(payment, {'cfdi_3_3'})
         xml_expected_str = misc.file_open(path.join(
-            'l10n_mx_edi_factoring', 'tests',
-            'expected_payment.xml')).read().encode('UTF-8')
+            'l10n_mx_edi_factoring', 'tests', 'expected_payment.xml')).read().encode('UTF-8')
         xml_expected = objectify.fromstring(xml_expected_str)
-        xml = payment.l10n_mx_edi_get_xml_etree()
-        self.xml_merge_dynamic_items(xml, xml_expected)
+        self.assertTrue(generated_files)
+        xml = objectify.fromstring(generated_files[0])
         xml_expected.attrib['Folio'] = xml.attrib['Folio']
+        xml_expected.attrib['Fecha'] = xml.attrib['Fecha']
+        xml_expected.attrib['Sello'] = xml.attrib['Sello']
+        xml_expected.attrib['Serie'] = xml.attrib['Serie']
+        xml_expected.Complemento = xml.Complemento
         self.assertEqualXML(xml, xml_expected)
+
+    def xml2dict(self, xml):
+        """Receive 1 lxml etree object and return a dict string.
+        This method allow us have a precise diff output"""
+        def recursive_dict(element):
+            return (element.tag,
+                    dict((recursive_dict(e) for e in element.getchildren()),
+                         ____text=(element.text or '').strip(), **element.attrib))
+        return dict([recursive_dict(xml)])
+
+    def assertEqualXML(self, xml_real, xml_expected):  # pylint: disable=invalid-name
+        """Receive 2 objectify objects and show a diff assert if exists."""
+        xml_expected = self.xml2dict(xml_expected)
+        xml_real = self.xml2dict(xml_real)
+        # "self.maxDiff = None" is used to get a full diff from assertEqual method
+        # This allow us get a precise and large log message of where is failing
+        # expected xml vs real xml More info:
+        # https://docs.python.org/2/library/unittest.html#unittest.TestCase.maxDiff
+        self.maxDiff = None
+        self.assertEqual(xml_real, xml_expected)

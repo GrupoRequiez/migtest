@@ -2,7 +2,7 @@
 
 {
     "name": "Mexican POS Management System",
-    "version": "13.0.1.0.0",
+    "version": "14.0.1.0.0",
     "author": "Vauxoo",
     "category": "Point of Sale",
     "website": "http://www.vauxoo.com",
@@ -18,8 +18,15 @@
         "views/account_view.xml",
         "views/point_of_sale_view.xml",
         "views/pos_config_view.xml",
+        "views/pos_payment_method_views.xml",
         "views/report_xml_session.xml",
     ],
+    'external_dependencies': {
+        'python': [
+            'zeep',
+            'zeep.transports',
+        ],
+    },
     "installable": True,
     "auto_install": False,
     'images': [

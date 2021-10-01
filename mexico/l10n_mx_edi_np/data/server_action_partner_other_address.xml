@@ -6,7 +6,7 @@
         <field name="state">code</field>
         <field name="sequence">5</field>
         <field name="code">
-            if record.l10n_mx_edi_pac_status == 'signed' and record.partner_id.child_ids:
+            if record.edi_state == 'sent' and record.partner_id.child_ids:
                 properties = record.partner_id.child_ids.filtered(lambda r: r.type == 'other')
                 for property in properties:
                     property.sudo().write({ 'active': False })
@@ -17,8 +17,8 @@
         <field name="model_id" ref="account.model_account_move"/>
         <field name="trigger">on_change</field>
         <field name="active" eval="True"/>
-        <field name="filter_domain">[('l10n_mx_edi_pac_status', '=', 'signed')]</field>
-        <field name="on_change_fields">l10n_mx_edi_pac_status</field>
+        <field name="filter_domain">[('edi_state', '=', 'signed')]</field>
+        <field name="trigger_field_ids" eval="[ref('account_edi.field_account_move__edi_state')]"/>
         <field name="action_server_id" ref="l10n_mx_edi_np.l10n_mx_edi_np_partner_other_address"/>
     </record>
 </odoo>

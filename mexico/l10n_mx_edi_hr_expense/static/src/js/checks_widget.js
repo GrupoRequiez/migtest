@@ -20,15 +20,16 @@ odoo.define('l10n_mx_hr_expense.checks_widget', function(require){
             this.get_html();
         },
         get_html: function(){
+            var self = this;
             this._rpc({
                 model: this.model,
                 method: 'json2qweb',
                 args: ['json_input', this.value],
             }).then(function(rendered_view){
-                this.modal = Qweb.render('ExpenseChecksModal',{ 'html_field': rendered_view});
-                var rendered_modal = $(this.modal).modal();
+                self.modal = Qweb.render('ExpenseChecksModal',{ 'html_field': rendered_view});
+                var rendered_modal = $(self.modal).modal();
                 rendered_modal.find('li').each(function(i) {
-                    $(this).delay(300 * i).fadeIn(800);
+                    $(this).delay(300).fadeIn(800);
                 });
             });
         },

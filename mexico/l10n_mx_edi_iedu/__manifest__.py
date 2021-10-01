@@ -3,13 +3,13 @@
 {
     'name': "EDI Educational Institutions (IEDU) Complement "
             "for the Mexican Localization",
-    'version': '13.0.1.0.0',
+    'version': '14.0.1.0.0',
     'author': 'Vauxoo',
     'category': 'Hidden',
     'license': 'LGPL-3',
     'website': "http://www.vauxoo.com",
     'depends': [
-        'l10n_mx_edi',
+        'l10n_mx_edi_extended',
     ],
     'data': [
         "security/ir.model.access.csv",

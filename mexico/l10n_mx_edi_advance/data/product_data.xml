@@ -8,6 +8,6 @@
         <field name="type">service</field>
         <field name="uom_id" ref="product_uom_act"/>
         <field name="uom_po_id" ref="product_uom_act"/>
-        <field name="l10n_mx_edi_code_sat_id" ref="l10n_mx_edi.prod_code_sat_84111506"/>
+        <field name="unspsc_code_id" ref="product_unspsc.unspsc_code_84111506"/>
     </record>
 </odoo>

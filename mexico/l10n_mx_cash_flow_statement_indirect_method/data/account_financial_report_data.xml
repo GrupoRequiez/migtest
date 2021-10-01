@@ -4,7 +4,6 @@
 
     <record id="cash_flow_indirect" model="account.financial.html.report">
         <field name="name">Cash Flow Statement - Indirect Method</field>
-        <field name="debit_credit" eval="False"/>
         <field name="analytic" eval="True"/>
         <field name="unfold_all_filter" eval="True"/>
         <field name="show_journal_filter" eval="True"/>

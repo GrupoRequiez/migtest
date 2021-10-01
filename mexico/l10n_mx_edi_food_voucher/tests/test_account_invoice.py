@@ -1,27 +1,20 @@
 import base64
 from lxml import objectify
 from odoo import fields
-from odoo.addons.l10n_mx_edi.tests.common import InvoiceTransactionCase
+from odoo.addons.l10n_mx_edi.tests.common import TestMxEdiCommon
 
 
-class TestL10nMxEdiInvoiceVoucher(InvoiceTransactionCase):
+class TestL10nMxEdiInvoiceVoucher(TestMxEdiCommon):
 
     def test_l10n_mx_edi_voucher_invoice(self):
+        self.certificate._check_credentials()
         product_model = self.env['product.product']
         partner_model = self.env['res.partner']
-        isr_tag = self.env['account.account.tag'].search(
-            [('name', '=', 'ISR')])
-        for rep_line in self.tax_negative.invoice_repartition_line_ids:
-            rep_line.tag_ids |= isr_tag
-        iva_tag = self.env['account.account.tag'].search(
-            [('name', '=', 'IVA')])
-        for rep_line in self.tax_positive.invoice_repartition_line_ids:
-            rep_line.tag_ids |= iva_tag
         detail = product_model.create({
             'name': 'Voucher Detail',
             'type': 'service',
             'categ_id': self.ref('product.product_category_all'),
-            'l10n_mx_edi_code_sat_id': self.ref('l10n_mx_edi.prod_code_sat_01010101') # noqa
+            'unspsc_code_id': self.ref('product_unspsc.unspsc_code_01010101')
         })
         employee_lines = [
             partner_model.browse(self.ref('base.res_partner_address_4')),
@@ -34,8 +27,9 @@ class TestL10nMxEdiInvoiceVoucher(InvoiceTransactionCase):
                 'l10n_mx_edi_curp': 'AAAA010101HCLJND07',
                 'l10n_mx_edi_voucher_nss': '91234567890',
             })
-        invoice = self.create_invoice()
+        invoice = self.invoice
         invoice.partner_id = self.ref('base.res_partner_12')
+        account = invoice.invoice_line_ids[0].account_id.id
         invoice.line_ids.unlink()
         invoice.invoice_line_ids.unlink()
         invoice.invoice_line_ids = ([(0, 0, {
@@ -43,15 +37,15 @@ class TestL10nMxEdiInvoiceVoucher(InvoiceTransactionCase):
             'name': self.product.name,
             'quantity': 1,
             'price_unit': 1500.00,
-            'account_id': self.ref('l10n_mx.1_cuenta401_01'),
+            'account_id': account,
             'product_uom_id': self.ref('uom.product_uom_unit'),
-            'tax_ids': [self.tax_positive.id]
+            'tax_ids': [self.tax_16.id]
         }), (0, 0, {
             'product_id': detail.id,
             'name': detail.name,
             'quantity': 0.0,
             'price_unit': 100.0,
-            'account_id': self.ref('l10n_mx.1_cuenta401_01'),
+            'account_id': account,
             'l10n_mx_edi_voucher_id': self.ref('base.res_partner_address_4'),
             'product_uom_id': self.ref('uom.product_uom_unit')
         }), (0, 0, {
@@ -59,14 +53,15 @@ class TestL10nMxEdiInvoiceVoucher(InvoiceTransactionCase):
             'name': detail.name,
             'quantity': 0.0,
             'price_unit': 100.0,
-            'account_id': self.ref('l10n_mx.1_cuenta401_01'),
+            'account_id': account,
             'l10n_mx_edi_voucher_id': self.ref('base.res_partner_address_3'),
             'product_uom_id': self.ref('uom.product_uom_unit')
         })])
 
         invoice.action_post()
-        self.assertEqual(invoice.l10n_mx_edi_pac_status, "signed",
-                         invoice.message_ids.mapped('body'))
+        generated_files = self._process_documents_web_services(invoice, {'cfdi_3_3'})
+        self.assertTrue(generated_files)
+        self.assertEqual(invoice.edi_state, "sent", invoice.message_ids.mapped('body'))
         xml_str = base64.b64decode(
             invoice.l10n_mx_edi_retrieve_last_attachment().datas)
         xml = objectify.fromstring(xml_str)

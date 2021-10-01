@@ -1,7 +1,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 {
     'name': 'Notary Public Complement',
-    'version': '13.0.1.0.0',
+    'version': '14.0.1.0.0',
     "author": "Vauxoo",
     "license": "LGPL-3",
     'category': 'Hidden',

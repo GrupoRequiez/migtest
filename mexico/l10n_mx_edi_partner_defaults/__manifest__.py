@@ -3,7 +3,7 @@
     'name': "Partner default values for Mexican localization",
     'summary': """
         Partner default values for fields in the Mexican localization""",
-    'version': "13.0.1.0.0",
+    'version': "14.0.1.0.0",
     'author': "Vauxoo",
     'website': "http://www.vauxoo.com",
     'category': 'Accounting',

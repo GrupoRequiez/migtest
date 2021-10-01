@@ -5,7 +5,7 @@
         <field name="model">account.payment</field>
         <field name="inherit_id" ref="account.view_account_payment_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='communication']" position="after">
+            <xpath expr="//field[@name='ref']" position="after">
                 <field name="l10n_mx_edi_employee_id" groups="l10n_mx_edi_hr_expense.allow_to_see_employee_payments"/>
             </xpath>
         </field>
@@ -15,7 +15,7 @@
         <field name="model">account.payment</field>
         <field name="inherit_id" ref="account.view_account_supplier_payment_tree"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='partner_type']" position="after">
+            <xpath expr="//field[@name='partner_id']" position="after">
                 <field name="l10n_mx_edi_employee_id" groups="l10n_mx_edi_hr_expense.allow_to_see_employee_payments"/>
             </xpath>
         </field>

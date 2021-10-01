@@ -2,24 +2,17 @@
 # License AGPL-3 or later (http://www.gnu.org/licenses/agpl).
 
 from datetime import datetime, timedelta
-from odoo.addons.l10n_mx_edi.tests.common import InvoiceTransactionCase
+
+from lxml.objectify import fromstring
+
+from odoo.addons.l10n_mx_edi.tests.common import TestMxEdiCommon
 
 
-class TestProductUnits(InvoiceTransactionCase):
-
-    def setUp(self):
-        super(TestProductUnits, self).setUp()
-        isr_tag = self.env['account.account.tag'].search(
-            [('name', '=', 'ISR')])
-        for rep_line in self.tax_negative.invoice_repartition_line_ids:
-            rep_line.tag_ids |= isr_tag
-        iva_tag = self.env['account.account.tag'].search(
-            [('name', '=', 'IVA')])
-        for rep_line in self.tax_positive.invoice_repartition_line_ids:
-            rep_line.tag_ids |= iva_tag
-        self.product.tracking = 'serial'
+class TestProductUnits(TestMxEdiCommon):
 
     def test_product_units(self):
+        self.certificate._check_credentials()
+        self.product.tracking = 'serial'
         purchase = self.create_purchase()
         purchase.button_confirm()
         picking = purchase.picking_ids
@@ -41,9 +34,10 @@ class TestProductUnits(InvoiceTransactionCase):
                 'advance_payment_method': 'delivered'}).create_invoices()
         invoice = sale_order.invoice_ids
         invoice.action_post()
-        self.assertEqual(invoice.l10n_mx_edi_pac_status, "signed",
-                         invoice.message_ids.mapped('body'))
-        xml = invoice.l10n_mx_edi_get_xml_etree()
+        generated_files = self._process_documents_web_services(invoice, {'cfdi_3_3'})
+        self.assertTrue(generated_files)
+        self.assertEqual(invoice.edi_state, "sent", invoice.message_ids.mapped('body'))
+        xml = fromstring(generated_files[0])
         self.assertEqual(xml.Conceptos.Concepto.Parte.attrib[
             'NoIdentificacion'], '123456',
             "The product lot/serial was not added")
@@ -58,7 +52,7 @@ class TestProductUnits(InvoiceTransactionCase):
 
     def create_purchase(self):
         purchase = self.env['purchase.order'].sudo().create({
-            'partner_id': self.partner_agrolait.id,
+            'partner_id': self.partner_a.id,
             'order_line': [(0, 0, {
                 'name': self.product.name,
                 'product_id': self.product.id,

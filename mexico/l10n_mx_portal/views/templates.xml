@@ -13,7 +13,7 @@
             <t t-set="attachment_id" t-value="invoice.l10n_mx_edi_retrieve_last_attachment()"/>
             <td>
                 <div class="btn-group pull-right">
-                    <!-- <a t-att-href="'/send_invoice_mail/{0}'.format(invoice.id)" t-att-class="'btn btn-xs btn-primary' if attachment_id else 'btn btn-xs btn-primary disabled'" title="Send Email"><i class="fa fa-envelope"></i></a> -->
+                    <a t-att-href="'/send_invoice_mail/{0}'.format(invoice.id)" t-att-class="'btn btn-xs btn-primary' if attachment_id else 'btn btn-xs btn-primary disabled'" title="Send Email"><i class="fa fa-envelope"></i></a>
                     <a t-att-href="'/web/content/{0}?download=true'.format(attachment_id.id if attachment_id else 0)" t-att-class="'btn btn-xs btn-primary' if attachment_id else 'btn btn-xs btn-primary disabled'" title="Download XML" target="_blank"><i class="fa fa-download"></i></a>
                 </div>
             </td>

@@ -1,6 +1,6 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from lxml import etree
+from lxml.etree import fromstring
 from odoo import api, fields, models
 
 
@@ -49,13 +49,17 @@ class AccountMove(models.Model):
         self.l10n_mx_edi_substitute_id = False
         self.l10n_mx_edi_vehicle_ids = False
 
-    def _l10n_mx_edi_create_cfdi(self):
-        """If the CFDI was signed, try to adds the schemaLocation for Donations"""
-        result = super(AccountMove, self)._l10n_mx_edi_create_cfdi()
-        cfdi = result.get('cfdi')
-        if not cfdi:
+    def _l10n_mx_edi_decode_cfdi(self, cfdi_data=None):
+        """If the CFDI was signed, try to adds the schemaLocation correctly"""
+        result = super(AccountMove, self)._l10n_mx_edi_decode_cfdi(cfdi_data=cfdi_data)
+        if not cfdi_data:
             return result
-        cfdi = self.l10n_mx_edi_get_xml_etree(cfdi)
+        cfdi_data = cfdi_data.replace(b'xmlns__destruccion', b'xmlns:destruccion').replace(
+            b'xmlns__ventavehiculos', b'xmlns:ventavehiculos').replace(
+                b'xmlns__ventavehiculos', b'xmlns:ventavehiculos').replace(
+                    b'xmlns__pfic', b'xmlns:pfic').replace(b'xmlns__decreto', b'xmlns:decreto').replace(
+                        b'xmlns__vehiculousado', b'xmlns:vehiculousado')
+        cfdi = fromstring(cfdi_data)
         if 'destruccion' in cfdi.nsmap:
             cfdi.attrib['{http://www.w3.org/2001/XMLSchema-instance}schemaLocation'] = '%s %s %s' % (
                 cfdi.get('{http://www.w3.org/2001/XMLSchema-instance}schemaLocation'),
@@ -81,5 +85,5 @@ class AccountMove(models.Model):
                 cfdi.get('{http://www.w3.org/2001/XMLSchema-instance}schemaLocation'),
                 'http://www.sat.gob.mx/vehiculousado',
                 'http://www.sat.gob.mx/sitio_internet/cfd/vehiculousado/vehiculousado.xsd')
-        result['cfdi'] = etree.tostring(cfdi, pretty_print=True, xml_declaration=True, encoding='UTF-8')
+        result['cfdi_node'] = cfdi
         return result

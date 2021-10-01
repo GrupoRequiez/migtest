@@ -6,7 +6,7 @@
         Adds the option to download XML UUID from invoices
         using ZIP file.
     """,
-    "version": "13.0.1.0.0",
+    "version": "14.0.1.0.0",
     "author": "Vauxoo",
     "category": "Localization/Mexico",
     "website": "http://www.vauxoo.com/",
@@ -19,6 +19,7 @@
     "data": [
         'data/ir_actions_server_data.xml',
         'data/mail_message_subtype_data.xml',
+        'security/ir.model.access.csv',
     ],
     "installable": True,
     "auto_install": False,

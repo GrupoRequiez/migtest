@@ -8,19 +8,19 @@
             <t t-if="record.company_id.l10n_mx_edi_complement_type == 'sale' and record.l10n_mx_edi_vehicle_id and record.l10n_mx_edi_vehicle_id.odometer == 0">
                 <cfdi:ComplementoConcepto
                     xmlns:cfdi="http://www.sat.gob.mx/cfd/3">
+                    <t t-set="vehicle" t-value="record.l10n_mx_edi_vehicle_id"/>
                     <ventavehiculos:VentaVehiculos
                         xmlns:ventavehiculos="http://www.sat.gob.mx/ventavehiculos"
                         version="1.1"
-                        t-att-ClaveVehicular="record.l10n_mx_edi_vehicle_id.license_plate"
-                        t-att-Niv="record.l10n_mx_edi_vehicle_id.l10n_mx_edi_niv">
-                        <t t-if="record.l10n_mx_edi_vehicle_id.l10n_mx_edi_landing">
+                        t-att-ClaveVehicular="vehicle.license_plate"
+                        t-att-Niv="vehicle.l10n_mx_edi_niv">
+                        <t t-if="vehicle.l10n_mx_edi_landing">
                             <ventavehiculos:InformacionAduanera
-                                t-att-numero="record.l10n_mx_edi_vehicle_id.l10n_mx_edi_landing"
-                                t-att-fecha="record.l10n_mx_edi_vehicle_id.l10n_mx_edi_landing_date"
-                                t-att-aduana="record.l10n_mx_edi_vehicle_id.l10n_mx_edi_aduana"/>
+                                t-att-numero="vehicle.l10n_mx_edi_landing"
+                                t-att-fecha="vehicle.l10n_mx_edi_landing_date"
+                                t-att-aduana="vehicle.l10n_mx_edi_aduana"/>
                         </t>
-                        <t t-set="extra_part" t-value="[id for id,type in record.env['fleet.service.type'].search([]).get_xml_id().items() if type == 'l10n_mx_edi_cd.l10n_mx_edi_fleet_service_extra']"/>
-                        <t t-set="parts" t-value="record.env['fleet.vehicle.cost'].search([('vehicle_id', '=', record.l10n_mx_edi_vehicle_id.id),('cost_subtype_id', '=', extra_part[0])]) if extra_part else []"/>
+                        <t t-set="parts" t-value="vehicle.sudo().log_services.filtered(lambda s: s.service_type_id == record.env.ref('l10n_mx_edi_vehicle.l10n_mx_edi_fleet_service_extra'))"/>
                         <t t-if="parts">
                             <t t-foreach="parts" t-as="part">
                                 <t t-set="part_desc" t-value="part.description.split('/') if part.description else []"/>
@@ -30,7 +30,7 @@
                                         t-att-cantidad="quantity if quantity else 0.00"
                                         t-att-unidad="part_desc[1] if len(part_desc) &gt; 1 and part_desc[1] else None"
                                         t-att-noIdentificacion="part_desc[2] if len(part_desc) &gt; 2 and part_desc[2] else None"
-                                        t-att-descripcion="part.cost_subtype_id.name"
+                                        t-att-descripcion="part.service_type_id.name"
                                         t-att-valorUnitario="part.amount * float(quantity) if quantity else 0.00"
                                         t-att-importe="part.amount">
                                         <t t-if="len(part_desc) &gt; 3 and part_desc[3]">

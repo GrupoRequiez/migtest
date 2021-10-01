@@ -10,8 +10,7 @@ class AccountMove(models.Model):
     def _onchange_partner_id(self):
         """Set payment method and usage"""
         res = super()._onchange_partner_id()
-        if self.type in ('in_invoice', 'in_refund'
-                         ) or not self.partner_id.commercial_partner_id:
+        if self.move_type in ('in_invoice', 'in_refund') or not self.partner_id.commercial_partner_id:
             return res
         self.l10n_mx_edi_payment_method_id = (
             self.partner_id.commercial_partner_id
@@ -25,7 +24,7 @@ class AccountMove(models.Model):
         onchanges = {
             '_onchange_partner_id': [
                 'l10n_mx_edi_payment_method_id', 'l10n_mx_edi_usage',
-                'l10n_mx_edi_partner_bank_id'],
+                'partner_bank_id'],
         }
         for onchange_method, changed_fields in onchanges.items():
             if any(f not in vals for f in changed_fields):

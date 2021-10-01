@@ -30,20 +30,12 @@
                 Monto="225.00"/>
         </PLZ:Transaccion>
     </PLZ:Poliza>
-    <PLZ:Poliza Concepto="{concept3}" Fecha="{payment_date}" NumUnIdenPol="{move3}">
-        <PLZ:Transaccion Concepto="CUST.IN/2018/0002" DesCta="Banco" NumCta="102.01.02" Debe="225.00" Haber="0.00">
-            <PLZ:Transferencia CtaOri="BE68539007547034" BancoOriNal="999" CtaDest="123456789012345" BancoDestNal="012" Fecha="2018-05-15" Benef="YourCompany" RFC="XEXX010101000" Monto="225.00"/>
-        </PLZ:Transaccion>
-        <PLZ:Transaccion Concepto="Pago de cliente: FV/2018/0002" DesCta="Clientes nacionales" NumCta="105.01.01" Debe="0.00" Haber="225.00">
-            <PLZ:Transferencia CtaOri="BE68539007547034" BancoOriNal="999" CtaDest="123456789012345" BancoDestNal="012" Fecha="2018-05-15" Benef="YourCompany" RFC="XEXX010101000" Monto="225.00"/>
-        </PLZ:Transaccion>
-    </PLZ:Poliza>
     <PLZ:Poliza Concepto="{concept1}" Fecha="{date}" NumUnIdenPol="{move1}">
-        <PLZ:Transaccion Concepto="[FURN_7800] Desk Combination Desk combination, black-brown: chair + desk + drawer." DesCta="Ventas y/o servicios gravados a la tasa general" NumCta="401.01.01" Debe="0.00" Haber="450.00">
-            <PLZ:CompNal UUID_CFDI="00000000-0000-0000-0000-000000000000" RFC="XEXX010101000" MontoTotal="450.00"/>
+        <PLZ:Transaccion Concepto="[FURN_7800] Desk Combination Desk combination, black-brown: chair + desk + drawer." DesCta="Ventas y/o servicios gravados a la tasa general" NumCta="401.01.01" Debe="0.00" Haber="4000.00">
+            <PLZ:CompNal UUID_CFDI="{uuid_inv}" RFC="XEXX010101000" MontoTotal="4000.00"/>
         </PLZ:Transaccion>
-        <PLZ:Transaccion Concepto="{concept1}" DesCta="Clientes nacionales" NumCta="105.01.01" Debe="450.00" Haber="0.00">
-            <PLZ:CompNal UUID_CFDI="00000000-0000-0000-0000-000000000000" RFC="XEXX010101000" MontoTotal="450.00"/>
+        <PLZ:Transaccion Concepto="{concept1}" DesCta="Clientes nacionales" NumCta="105.01.01" Debe="4000.00" Haber="0.00">
+            <PLZ:CompNal UUID_CFDI="{uuid_inv}" RFC="XEXX010101000" MontoTotal="4000.00"/>
         </PLZ:Transaccion>
     </PLZ:Poliza>
 </PLZ:Polizas>

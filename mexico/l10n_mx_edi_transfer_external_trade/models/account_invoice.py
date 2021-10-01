@@ -13,7 +13,7 @@ class AccountMove(models.Model):
                 not self.l10n_mx_edi_external_trade):
             return values
         # Transfer reason (only support '01', '02')
-        related = self.get_cfdi_related()
+        related = self._l10n_mx_edi_read_cfdi_origin()
         if related and related['type'] == '05':
             values['reason_transfer'] = '01'
         else:

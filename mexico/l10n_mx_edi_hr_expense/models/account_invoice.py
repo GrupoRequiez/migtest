@@ -8,7 +8,7 @@ from odoo.tools.misc import formatLang
 class AccountMove(models.Model):
     _inherit = "account.move"
 
-    date_invoice = fields.Date(track_visibility='onchange')
+    date_invoice = fields.Date(tracking=True)
     l10n_mx_edi_expense_id = fields.Many2one(
         'hr.expense', 'Expense',
         help='Stores the expense related with this invoice')
@@ -31,7 +31,7 @@ class AccountMove(models.Model):
             lambda par: label not in par.category_id)
         invoices = self.filtered(lambda inv: inv.l10n_mx_edi_cfdi_amount and
                                  inv.partner_id in partners)
-        for invoice in invoices.filtered(lambda inv: inv.type in (
+        for invoice in invoices.filtered(lambda inv: inv.move_type in (
                 'in_invoice', 'in_refund')):
             diff = invoice.journal_id.l10n_mx_edi_amount_authorized_diff
             if not abs(invoice.amount_total - invoice.l10n_mx_edi_cfdi_amount) > diff:  # noqa
@@ -41,7 +41,7 @@ class AccountMove(models.Model):
                 formatLang(self.env, invoice.l10n_mx_edi_cfdi_amount, currency_obj=currency),  # noqa
                 formatLang(self.env, invoice.amount_total, currency_obj=currency),  # noqa
                 invoice.l10n_mx_edi_cfdi_uuid))
-        for invoice in invoices.filtered(lambda inv: inv.type in (
+        for invoice in invoices.filtered(lambda inv: inv.move_type in (
                 'out_invoice', 'out_refund')):
             diff = invoice.journal_id.l10n_mx_edi_amount_authorized_diff
             if not abs(invoice.amount_total - invoice.l10n_mx_edi_cfdi_amount) > diff:  # noqa

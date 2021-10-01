@@ -7,8 +7,8 @@
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             Version="3.3"
             t-att-Fecha="date"
-            t-att-Folio="invoice._get_string_cfdi(folio or '', 25)"
-            t-att-Serie="invoice._get_string_cfdi(serie or '', 40)"
+            t-att-Folio="(folio or '')[:25]"
+            t-att-Serie="(serie or '')[:40]"
             Sello=""
             t-att-FormaPago="payment_method or '99'"
             t-att-NoCertificado="certificate_number"
@@ -33,8 +33,8 @@
             </t>
             <cfdi:Emisor
                 t-att-Rfc="supplier.vat"
-                t-att-Nombre="invoice._get_string_cfdi(supplier.name, 254)"
-                t-att-RegimenFiscal="supplier.company_id.l10n_mx_edi_fiscal_regime"/>
+                t-att-Nombre="(supplier.name)[:254]"
+                t-att-RegimenFiscal="supplier.l10n_mx_edi_fiscal_regime"/>
             <cfdi:Receptor
                 Rfc="XAXX010101000"
                 UsoCFDI="P01"/>
@@ -43,7 +43,7 @@
                     <t t-set="line_discount" t-value="sum([record._get_discount(6, l) for l in line.lines])"/>
                     <cfdi:Concepto
                         ClaveProdServ="01010101"
-                        t-att-NoIdentificacion="invoice._get_string_cfdi(line.name or '')"
+                        t-att-NoIdentificacion="line.name or ''"
                         Cantidad="1"
                         ClaveUnidad="ACT"
                         Descripcion="Venta"

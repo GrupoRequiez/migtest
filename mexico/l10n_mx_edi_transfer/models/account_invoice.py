@@ -24,6 +24,6 @@ class AccountMove(models.Model):
         """If it is a 'traslado' invoice then skip inventory account moves"""
         if (self.company_id.partner_id.commercial_partner_id ==
                 self.partner_id.commercial_partner_id and
-                self.l10n_mx_edi_is_required()):
+                self.l10n_mx_edi_cfdi_request in ('on_invoice', 'on_refund')):
             return []
         return super()._anglo_saxon_sale_move_lines(i_line)

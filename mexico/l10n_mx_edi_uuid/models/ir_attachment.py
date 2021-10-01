@@ -29,25 +29,22 @@ class IrAttachment(models.Model):
             if not attach.datas:
                 attachments_skipped |= attach
                 continue
-            cfdi = base64.decodestring(attach.datas).replace(
+            cfdi = base64.decodebytes(attach.datas).replace(
                 b'xmlns:schemaLocation', b'xsi:schemaLocation')
             model = self.env[attach.res_model].browse(attach.res_id)
             try:
-                tree = model.l10n_mx_edi_get_xml_etree(cfdi)
+                tree = (model if model._name == 'account.move' else model.move_id)._l10n_mx_edi_decode_cfdi(cfdi)
             except etree.XMLSyntaxError:
                 # it is a invalid xml
                 attachments_skipped |= attach
                 continue
 
-            tfd_node = model.l10n_mx_edi_get_tfd_etree(tree)
-            if tfd_node is None:
+            if not tree.get('uuid'):
                 # It is not a signed xml
                 attachments_skipped |= attach
                 continue
             attach.with_context(force_l10n_mx_edi_cfdi_uuid=True).write({
-                'l10n_mx_edi_cfdi_uuid': tfd_node.get('UUID')})
-            if not model.l10n_mx_edi_cfdi_name:
-                model.l10n_mx_edi_cfdi_name = attach.name
+                'l10n_mx_edi_cfdi_uuid': tree.get('uuid', '').upper().strip()})
         (self - uuid_attachments + attachments_skipped).with_context(
             force_l10n_mx_edi_cfdi_uuid=True).write({
                 'l10n_mx_edi_cfdi_uuid': False})

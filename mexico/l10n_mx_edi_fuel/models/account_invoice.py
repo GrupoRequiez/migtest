@@ -40,8 +40,7 @@ class AccountMove(models.Model):
         if not lines:
             return result
         for line in lines:
-            for tax in line.tax_ids.filtered(lambda r: r.amount > 0 and # noqa
-                                                          r.l10n_mx_cfdi_tax_type != 'Exento'): # noqa
+            for tax in line.tax_ids.filtered(lambda r: r.amount > 0 and r.l10n_mx_tax_type != 'Exento'):
                 result += round(abs(
                     tax.amount / 100.0 * line.price_subtotal), 2)
         return result

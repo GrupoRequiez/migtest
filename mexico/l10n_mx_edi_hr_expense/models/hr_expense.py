@@ -57,7 +57,7 @@ class HrExpenseSheet(models.Model):
         'Number of Paid Invoices', compute='_compute_invoices_count')
     l10n_mx_edi_invoices_count = fields.Integer(
         'Number of Open Invoices', compute='_compute_invoices_count')
-    payment_mode = fields.Selection(track_visibility='onchange')
+    payment_mode = fields.Selection(tracking=True)
     petty_journal_id = fields.Many2one(
         'account.journal', 'Petty Cash',
         help='Specifies the journal that will be used to make the '
@@ -90,13 +90,13 @@ class HrExpenseSheet(models.Model):
         for sheet in self:
             invoices = sheet.expense_line_ids.mapped('l10n_mx_edi_invoice_id')
             sheet.l10n_mx_edi_paid_invoices_count = len(invoices.filtered(
-                lambda inv: inv.invoice_payment_state == 'paid'))
+                lambda inv: inv.payment_state == 'paid'))
             sheet.l10n_mx_edi_invoices_count = len(invoices.filtered(
                 lambda inv: inv.state in ('posted', 'draft')))
 
     @api.depends('employee_id', 'expense_line_ids.partner_id')
     def _compute_l10n_mx_edi_accountant(self):
-        label = self.env.ref('l10n_mx_edi_hr_expense.tag_vendors')
+        label = self.env.ref('l10n_mx_edi_hr_expense.tag_vendors', raise_if_not_found=False)
         for sheet in self:
             employee = sheet.employee_id
             supplier = sheet.expense_line_ids.mapped(
@@ -138,7 +138,7 @@ class HrExpenseSheet(models.Model):
             sheet.write({'state': 'post'})
             with_cfdi = expenses.filtered('l10n_mx_edi_invoice_id')
             if not with_cfdi or all(
-                    inv.invoice_payment_state == 'paid' for inv in
+                    inv.payment_state == 'paid' for inv in
                     with_cfdi.mapped('l10n_mx_edi_invoice_id')):
                 sheet.write({'state': 'done'})
 
@@ -152,7 +152,7 @@ class HrExpenseSheet(models.Model):
             'domain': [('id', 'in', self.expense_line_ids.mapped(
                 'l10n_mx_edi_invoice_id').filtered(
                     lambda inv: inv.state in ('posted', 'draft')).ids)],
-            'context': {'type': 'in_invoice',
+            'context': {'move_type': 'in_invoice',
                         'search_default_group_by_partner_id': 1},
         }
 
@@ -165,8 +165,8 @@ class HrExpenseSheet(models.Model):
             'type': 'ir.actions.act_window',
             'domain': [('id', 'in', self.expense_line_ids.mapped(
                 'l10n_mx_edi_invoice_id').filtered(
-                    lambda inv: inv.invoice_payment_state == 'paid').ids)],
-            'context': {'type': 'in_invoice',
+                    lambda inv: inv.payment_state == 'paid').ids)],
+            'context': {'move_type': 'in_invoice',
                         'search_default_group_by_partner_id': 1},
         }
 
@@ -273,26 +273,26 @@ class HrExpense(models.Model):
 
     active = fields.Boolean(
         help="In the line this will be necessary to split the expenses once"
-             " they are received.", track_visibility='onchange',
+             " they are received.", tracking=True,
         default=True
     )
 
     l10n_mx_edi_functionally_approved = fields.Boolean(
         "Functionally Approved", copy=False,
-        help="Comply with the functional checks?", track_visibility='onchange',
-        default=False, readonly=1, force_save=1
+        help="Comply with the functional checks?", tracking=True,
+        default=False, readonly=1
     )
 
     l10n_mx_edi_fiscally_approved = fields.Boolean(
         "Fiscally Approved", copy=False,
-        help="Comply with the fiscal checks?", track_visibility='onchange',
-        default=False, readonly=1, force_save=1
+        help="Comply with the fiscal checks?", tracking=True,
+        default=False, readonly=1,
     )
 
     l10n_mx_edi_forced_approved = fields.Boolean(
         "Forced Approved", copy=False,
-        help="This is a paid not deductible", track_visibility='onchange',
-        default=False, readonly=1, force_save=1
+        help="This is a paid not deductible", tracking=True,
+        default=False, readonly=1,
     )
 
     name = fields.Char(states={'downloaded': [('readonly', False)],
@@ -301,7 +301,7 @@ class HrExpense(models.Model):
     product_id = fields.Many2one(states={'downloaded': [('readonly', False)],
                                          'draft': [('readonly', False)],
                                          'refused': [('readonly', False)]},
-                                 track_visibility='onchange')
+                                 tracking=True)
     quantity = fields.Float(states={'downloaded': [('readonly', False)],
                                     'draft': [('readonly', False)],
                                     'refused': [('readonly', False)]})
@@ -312,32 +312,32 @@ class HrExpense(models.Model):
     date = fields.Date(states={'downloaded': [('readonly', False)],
                                'draft': [('readonly', False)],
                                'refused': [('readonly', False)]},
-                       track_visibility='onchange',
+                       tracking=True,
                        help="Date the payment was created in the system")
     l10n_mx_edi_uuid = fields.Text(
-        "UUID", track_visibility='onchange',
+        "UUID", tracking=True,
         help="UUID of the xml's attached comma separated if more than one.")
     total_amount = fields.Monetary(inverse='_inverse_amount')
 
-    l10n_mx_edi_date = fields.Date("Date (att)", track_visibility='onchange',
+    l10n_mx_edi_date = fields.Date("Date (att)", tracking=True,
                                    help="Date on the CFDI attached [If 1 if "
                                         "several we will need to split them]")
     l10n_mx_edi_subtotal = fields.Float("Amount Subtotal")
     l10n_mx_edi_tax = fields.Float(
-        "Tax", track_visibility='onchange')
+        "Tax", tracking=True)
     l10n_mx_edi_discount = fields.Float(
-        "Discount", track_visibility='onchange')
+        "Discount", tracking=True)
     l10n_mx_edi_withhold = fields.Float(
-        "Withhold", track_visibility='onchange')
+        "Withhold", tracking=True)
     l10n_mx_edi_analysis = fields.Text(
-        "Analysis", copy=False, track_visibility='onchange',
+        "Analysis", copy=False, tracking=True,
         help="See in json (and future with a fancy widget) the summary of the"
              " test run and their result [Per fiscal test]")
     l10n_mx_edi_analysis_html = fields.Html(
         "Analysis HTML", compute="_compute_analysis_html",
-        track_visibility='onchange')
+        tracking=True)
     l10n_mx_edi_functional_details = fields.Text(
-        'Functional Details', copy=False, track_visibility="onchange",
+        'Functional Details', copy=False, tracking=True,
         help="See in json (and future with a fancy widget) the summary of the"
              " test run and their result [Per functional test]")
     l10n_mx_edi_functional_details_html = fields.Html(
@@ -349,12 +349,12 @@ class HrExpense(models.Model):
         help="This user will be the responsible to review the expenses report "
              "after the manager actually approve it.")
     l10n_mx_edi_move_id = fields.Many2one(
-        'account.move', 'Journal Entry', readonly=True, force_save=1,
+        'account.move', 'Journal Entry', readonly=True,
     )
     l10n_mx_edi_move_line_id = fields.Many2one(
-        'account.move.line', 'Journal Item', readonly=True, force_save=1,
+        'account.move.line', 'Journal Item', readonly=True,
     )
-    account_id = fields.Many2one(track_visibility='onchange',
+    account_id = fields.Many2one(tracking=True,
                                  states={'downloaded': [('readonly', False)],
                                          'draft': [('readonly', False)],
                                          'refused': [('readonly', False)]},
@@ -460,7 +460,7 @@ class HrExpense(models.Model):
             'failed': values.get('fail', {}),
             'succeeded': values.get('ok', {}),
         }
-        return self.env['ir.qweb'].render(template.id, qcontext)
+        return self.env['ir.qweb']._render(template.id, qcontext)
 
     def _compute_analysis_html(self):
         for expense in self:
@@ -477,7 +477,7 @@ class HrExpense(models.Model):
         default="downloaded",
         readonly=False,
         inverse='_inverse_state',
-        track_visibility='onchange',
+        tracking=True,
     )
     payment_mode = fields.Selection(
         selection_add=[('petty_account',
@@ -485,7 +485,7 @@ class HrExpense(models.Model):
                        ('company_account',
                         'Company (Generate a payable for the supplier).')],
         default='company_account',
-        track_visibility='onchange',
+        tracking=True,
     )
     l10n_mx_edi_sat_status = fields.Selection(
         selection=[
@@ -503,7 +503,7 @@ class HrExpense(models.Model):
         readonly=True,
         copy=False,
         required=True,
-        track_visibility='onchange',
+        tracking=True,
         default='undefined'
     )
     l10n_mx_edi_functional = fields.Selection(
@@ -518,22 +518,22 @@ class HrExpense(models.Model):
         readonly=True,
         copy=False,
         required=True,
-        track_visibility='onchange',
+        tracking=True,
         default='undefined'
     )
     email_from = fields.Char(
-        track_visibility='onchange',)
+        tracking=True,)
     partner_id = fields.Many2one(
         "res.partner", "Supplier",
-        track_visibility='onchange',
+        tracking=True,
         help="Partner that generated this invoices",
         ondelete='restrict',
         compute="_compute_partner_id", store=True, inverse='_inverse_partner')
     l10n_mx_count_cfdi = fields.Integer(
-        "Count CFDI's", track_visibility='onchange')
+        "Count CFDI's", tracking=True)
     l10n_mx_edi_invoice_id = fields.Many2one(
         'account.move', 'Invoice', help='Invoice created with this expense',
-        readonly=True, copy=False)
+        readonly=True, copy=False, index=True)
     l10n_mx_edi_document_type = fields.Selection(
         [('in_invoice', 'Vendor Bill'), ('in_refund', 'Vendor Credit Note')],
         'Document Type', help="Save the document type in the CFDI.")
@@ -541,6 +541,9 @@ class HrExpense(models.Model):
         'Is to check?', copy=False,
         help='If is marked, the expense wait for the CFDI with the fiscal '
         'data, and must be merged with the expense with a CFDI.')
+    employee_id = fields.Many2one(
+        states={'downloaded': [('readonly', False)], 'draft': [('readonly', False)],
+                'reported': [('readonly', False)], 'refused': [('readonly', False)]})
 
     def create_partner_from_cfdi(self):
         partner = self.env['res.partner']
@@ -603,7 +606,7 @@ class HrExpense(models.Model):
 
     @api.depends('sheet_id', 'sheet_id.account_move_id', 'sheet_id.state',
                  'l10n_mx_edi_invoice_id.state',
-                 'l10n_mx_edi_invoice_id.invoice_payment_state')
+                 'l10n_mx_edi_invoice_id.payment_state')
     def _compute_state(self):
         for expense in self:
             if not expense.sheet_id:
@@ -614,10 +617,10 @@ class HrExpense(models.Model):
                 expense.state = "refused"
             elif (expense.sheet_id.state in ('done', 'post') and
                   expense.l10n_mx_edi_invoice_id and
-                  expense.l10n_mx_edi_invoice_id.invoice_payment_state != 'paid'):  # noqa
+                  expense.l10n_mx_edi_invoice_id.payment_state != 'paid'):  # noqa
                 expense.state = 'approved'
             elif (expense.sheet_id.state == "done" or
-                  expense.l10n_mx_edi_invoice_id.invoice_payment_state == 'paid'):  # noqa
+                  expense.l10n_mx_edi_invoice_id.payment_state == 'paid'):  # noqa
                 expense.state = "done"
             elif expense.sheet_id.state in ["approve", "post"]:
                 expense.state = "approved"
@@ -868,10 +871,10 @@ special cases to work with:
         invoices_cache = {}
         for att in atts:
             cfdi = att.l10n_mx_edi_is_cfdi33()
-            if not cfdi:
+            if cfdi is False:
                 invoices -= att
                 continue
-            cfdi = self.env['account.move'].l10n_mx_edi_get_tfd_etree(cfdi)
+            cfdi = self.l10n_mx_edi_get_tfd_etree(cfdi)
             if cfdi is None:
                 invoices -= att
                 continue
@@ -1163,9 +1166,9 @@ special cases to work with:
         for cfdi in data['cfdi_related']:
             if not invoice.search([
                     ('partner_id', '=', self.partner_id.id),
-                    ('l10n_mx_edi_cfdi_name', '!=', False),
-                    ('type', '=', 'in_invoice')]).filtered(
-                        lambda inv: inv.l10n_mx_edi_cfdi_uuid == cfdi) and not self.search(  # noqa
+                    ('edi_document_ids', '!=', False),
+                    ('move_type', '=', 'in_invoice')]).filtered(
+                        lambda inv: inv.l10n_mx_edi_cfdi_uuid == cfdi) and not self.search(
                             [('l10n_mx_edi_uuid', '=', cfdi),
                              ('partner_id', '=', self.partner_id.id)],
                             limit=1):
@@ -1520,7 +1523,7 @@ special cases to work with:
             'domain': [('id', 'in', self.mapped(
                 'l10n_mx_edi_invoice_id').ids)],
             'context': {
-                'type': 'in_invoice',
+                'move_type': 'in_invoice',
             }
         }
 
@@ -1575,7 +1578,12 @@ special cases to work with:
                     'res_model': 'account.move',
                     'res_id': invoice.id,
                 }).id)
-            invoice.l10n_mx_edi_cfdi_name = cfdi.name
+            self.env['account.edi.document'].create({
+                'edi_format_id': self.env.ref('l10n_mx_edi.edi_cfdi_3_3').id,
+                'move_id': invoice.id,
+                'state': 'sent',
+                'attachment_id': cfdi.id,
+            })
             exp.l10n_mx_edi_invoice_id = invoice.id
             invoice.l10n_mx_edi_expense_id = exp.id
             invoice.with_context(no_new_invoice=True).message_post_with_view(
@@ -1598,11 +1606,9 @@ special cases to work with:
                 if exp.payment_mode == 'own_account' else petty_cash
             payment_method = journal.outbound_payment_method_ids
             payment.with_context(ctx).sudo().create({
-                'payment_date': invoice.date_invoice,
-                'payment_method_id': payment_method[
-                    0].id if payment_method else False,
+                'date': invoice.date_invoice,
+                'payment_method_id': payment_method[0].id if payment_method else False,
                 'journal_id': journal.id,
-                'communication': exp.name,
                 'amount': invoice.amount_total,
             }).create_payments()
         return True
@@ -1637,7 +1643,7 @@ special cases to work with:
     def l10n_mx_edi_get_invoice_data(self, inv):
         invoice = self.env['account.move']
         prod = self.env['product.product']
-        sat_code = self.env['l10n_mx_edi.product.sat.code']
+        sat_code = self.env['product.unspsc.code']
         acc_pay_term = self.env['account.payment.term']
         uom = self.env['uom.uom']
 
@@ -1645,9 +1651,9 @@ special cases to work with:
         journal = invoice.with_context(
             default_type=document_type)._get_default_journal()
         account = self.account_id.id or (
-            journal.default_credit_account_id.id if document_type in (
+            journal.default_account_id.id if document_type in (
                 'out_invoice', 'in_refund') else
-            journal.default_debit_account_id.id)
+            journal.default_account_id.id)
         invoice_line_ids = []
         tax_global = self._get_tax_global()
         label = self.env.ref('l10n_mx_edi_hr_expense.tag_force_invoice_total')
@@ -1680,8 +1686,7 @@ special cases to work with:
 
             code_sat = sat_code.search([
                 ('code', '=', line['uom_code'])], limit=1)
-            uom_id = uom.search([
-                ('l10n_mx_edi_code_sat_id', '=', code_sat.id)], limit=1)
+            uom_id = uom.search([('unspsc_code_id', '=', code_sat.id)], limit=1)
 
             line_taxes = []
             taxes = tax_global or line['taxes']
@@ -1761,7 +1766,7 @@ special cases to work with:
             'date': self.date,
             'currency_id': self.currency_id.id,
             'invoice_line_ids': invoice_line_ids,
-            'type': document_type,
+            'move_type': document_type,
             'journal_id': journal.id,
             'l10n_mx_edi_origin': cfdi_origin,
         }
@@ -2071,7 +2076,7 @@ special cases to work with:
                 'date': expense.date,
                 'currency_id': expense.currency_id.id,
                 'invoice_line_ids': invoice_line_ids,
-                'type': inv_type,
+                'move_type': inv_type,
                 'journal_id': journal.id,
             }
             if not data.get('company_id'):
@@ -2124,7 +2129,7 @@ special cases to work with:
                    sheet.employee_id.journal_id)
         if not journal:
             return res
-        return journal.default_credit_account_id.id
+        return journal.default_account_id.id
 
     @api.depends('employee_id')
     def _compute_is_ref_editable(self):
@@ -2138,3 +2143,13 @@ special cases to work with:
     def l10n_mx_edi_retrieve_payment(self):
         """Method to be inherited"""
         return True
+
+    @api.model
+    def l10n_mx_edi_get_tfd_etree(self, cfdi):
+        """Get the TimbreFiscalDigital node from the cfdi."""
+        if not hasattr(cfdi, 'Complemento'):
+            return None
+        attribute = 'tfd:TimbreFiscalDigital[1]'
+        namespace = {'tfd': 'http://www.sat.gob.mx/TimbreFiscalDigital'}
+        node = cfdi.Complemento.xpath(attribute, namespaces=namespace)
+        return node[0] if node else None

@@ -2,7 +2,7 @@
 
 {
     'name': 'Odoo Mexico Localization for Cash Basis  Entries',
-    'version': '13.0.1.0.0',
+    'version': '14.0.1.0.0',
     'author': 'Vauxoo',
     'category': 'Accounting',
     'license': 'OEEL-1',

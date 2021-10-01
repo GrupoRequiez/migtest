@@ -8,7 +8,7 @@ class Partner(models.Model):
 
     l10n_mx_edi_payment_method_id = fields.Many2one(
         'l10n_mx_edi.payment.method',
-        string="Payment Method",
+        string="Payment Way",
         help='This payment method will be used by default in the related '
         'documents (invoices, payments, and bank statements).',
         default=lambda self: self.env.ref('l10n_mx_edi.payment_method_otros',

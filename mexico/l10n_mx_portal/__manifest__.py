@@ -7,7 +7,7 @@
         Adds the ability to download your XML signed file and to send
         via email the signed XML and PDF files of the electronic invoice.
     """,
-    "version": "13.0.1.0.0",
+    "version": "14.0.1.0.0",
     "author": "Vauxoo",
     "category": "Website",
     "website": "http://www.vauxoo.com/",
@@ -21,6 +21,8 @@
     "data": [
         "views/templates.xml",
         "views/sale_portal_templates.xml",
+        "views/portal_my_invoices.xml",
+        "views/assets.xml",
     ],
     "test": [],
     "js": [],

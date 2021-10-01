@@ -10,7 +10,6 @@
         <field name="tax_group_id" ref="l10n_mx.tax_group_iva_16"/>
         <field name="tax_exigibility">on_payment</field>
         <field name="cash_basis_transition_account_id" ref="l10n_mx.1_cuenta118_01"/>
-        <field name="cash_basis_base_account_id" ref="l10n_mx.1_cuenta801_01_99"/>
         <field name="invoice_repartition_line_ids" eval="[(5, 0, 0),
             (0,0, {
                 'factor_percent': 100,

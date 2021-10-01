@@ -1,10 +1,10 @@
 
 from odoo import fields
-from odoo.addons.l10n_mx_edi.tests.common import InvoiceTransactionCase
+from odoo.addons.l10n_mx_edi.tests.common import TestMxEdiCommon
 from odoo.exceptions import ValidationError
 
 
-class TestL10nMxPartnerBlocklist(InvoiceTransactionCase):
+class TestL10nMxPartnerBlocklist(TestMxEdiCommon):
 
     def setUp(self):
         super(TestL10nMxPartnerBlocklist, self).setUp()
@@ -14,13 +14,6 @@ class TestL10nMxPartnerBlocklist(InvoiceTransactionCase):
         })
         self.server_action = self.env.ref(
             'l10n_mx_partner_blocklist.partner_blocklist_status_server_action')
-        self.manager_billing.write({
-            'groups_id': [(6, 0, [
-                self.ref('sales_team.group_sale_manager'),
-                self.ref('purchase.group_purchase_manager'),
-                self.ref('l10n_mx_partner_blocklist.group_partner_blacklist'),
-            ])]
-        })
 
     def test_partner_blocklist(self):
         # Checking partner status messages
@@ -31,7 +24,7 @@ class TestL10nMxPartnerBlocklist(InvoiceTransactionCase):
             'active_model': 'res.partner'}).run()
         self.assertEqual(self.partner_camptocamp.l10n_mx_in_blocklist,
                          'done', 'The partner is not OK')
-        self.env['res.partner.blacklist'].create({
+        self.env['res.partner.blacklist'].sudo().create({
             'vat': 'XAXX010101000',
             'taxpayer_name': self.partner_camptocamp.name,
         })
@@ -71,7 +64,7 @@ class TestL10nMxPartnerBlocklist(InvoiceTransactionCase):
                 'date_planned': fields.datetime.today(),
                 'product_qty': 1.00,
                 'price_unit': 100.00,
-                'product_uom': self.ref('uom.product_uom_unit'),
+                'product_uom': self.product.uom_po_id.id,
             })]
         })
         try:
@@ -82,7 +75,7 @@ class TestL10nMxPartnerBlocklist(InvoiceTransactionCase):
         except ValidationError as e:
             self.assertEqual(raise_msg, e.name[:29])
 
-        invoice = self.create_invoice()
+        invoice = self.invoice
         try:
             invoice.action_post()
             self.assertEqual(self.partner_camptocamp.l10n_mx_in_blocklist,
