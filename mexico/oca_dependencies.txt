@@ -1,0 +1,3 @@
+server-tools git@github.com:Vauxoo/server-tools.git
+enterprise git@github.com:odoo/enterprise.git
+mexico-document git@git.vauxoo.com:vauxoo/mexico-document.git
